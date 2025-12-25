@@ -15,7 +15,6 @@ if (!MONGO_URI) {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var _mongoClientPromise: Promise<MongoClient> | undefined
 }
 
@@ -50,8 +49,7 @@ export async function GET(req: Request) {
     const client = await clientPromise
     const db = client.db(DB_NAME)
 
-    const query =
-      category && category !== "all" ? { category } : {}
+    const query = category && category !== "all" ? { category } : {}
 
     const products = await db
       .collection("products")
@@ -81,23 +79,14 @@ export async function POST(req: Request) {
     const capacity = String(formData.get("capacity") || "")
     const price = Number(formData.get("price") || 0)
 
-    const features = String(formData.get("features") || "")
-      .split(",")
-      .map(f => f.trim())
-      .filter(Boolean)
-
     let image = ""
-
     const imageFile = formData.get("image") as File | null
 
     if (imageFile && imageFile.size > 0) {
       await ensureUploadDir()
-
       const buffer = Buffer.from(await imageFile.arrayBuffer())
       const fileName = `${Date.now()}-${imageFile.name}`
-
       fs.writeFileSync(path.join(UPLOAD_DIR, fileName), buffer)
-
       image = `/tmp/uploads/${fileName}`
     }
 
@@ -110,7 +99,6 @@ export async function POST(req: Request) {
       category,
       capacity,
       price,
-      features,
       image,
       createdAt: new Date().toISOString(),
     })
@@ -153,21 +141,11 @@ export async function PUT(req: Request) {
       }
     }
 
-    const features = formData.get("features")
-    if (features) {
-      updateData.features = String(features)
-        .split(",")
-        .map(f => f.trim())
-        .filter(Boolean)
-    }
-
     const imageFile = formData.get("image") as File | null
     if (imageFile && imageFile.size > 0) {
       await ensureUploadDir()
-
       const buffer = Buffer.from(await imageFile.arrayBuffer())
       const fileName = `${Date.now()}-${imageFile.name}`
-
       fs.writeFileSync(path.join(UPLOAD_DIR, fileName), buffer)
       updateData.image = `/tmp/uploads/${fileName}`
     }

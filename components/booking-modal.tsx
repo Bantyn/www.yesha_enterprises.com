@@ -182,6 +182,7 @@ export function BookingModal() {
                     Preferred Installation Date
                   </label>
                   <input
+                    title="select date"
                     type="date"
                     required
                     value={preferredDate}

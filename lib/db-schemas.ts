@@ -14,7 +14,6 @@ export type Product = {
   category: string
   image: string
   capacity: string
-  features: string[]
   description?: string
 }
 

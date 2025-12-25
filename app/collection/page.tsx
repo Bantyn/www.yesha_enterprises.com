@@ -129,10 +129,6 @@ export default function CollectionPage() {
                         ₹{product.price.toLocaleString()}
                       </span>
                     </div>
-
-                    <p className="text-xs text-muted-foreground line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      {product.features.join(" • ")}
-                    </p>
                   </div>
 
                   {/* Glow */}

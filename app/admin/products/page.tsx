@@ -29,7 +29,6 @@ export default function AdminProductsPage() {
     category: string
     capacity: string
     price: number
-    features: string
     image: string
     file?: File | null
   }>({
@@ -38,7 +37,6 @@ export default function AdminProductsPage() {
     category: "",
     capacity: "",
     price: 0,
-    features: "",
     image: "",
     file: null,
   })
@@ -74,8 +72,6 @@ export default function AdminProductsPage() {
     formPayload.append("category", formData.category)
     formPayload.append("capacity", formData.capacity)
     formPayload.append("price", String(formData.price))
-    formPayload.append("features", formData.features)
-
     if (formData.file) {
       formPayload.append("image", formData.file)
     }
@@ -104,7 +100,6 @@ export default function AdminProductsPage() {
         category: "",
         capacity: "",
         price: 0,
-        features: "",
         image: "",
         file: null,
       })
@@ -125,7 +120,7 @@ export default function AdminProductsPage() {
       category: product.category,
       capacity: product.capacity,
       price: product.price,
-      features: product.features.join(", "),
+
       image: product.image,
       file: null,
     })
@@ -210,6 +205,7 @@ export default function AdminProductsPage() {
               <Label>Image</Label>
               <input
                 type="file"
+                title="upload file"
                 accept="image/*"
                 onChange={(e) => {
                   const file = e.target.files?.[0]
@@ -223,13 +219,10 @@ export default function AdminProductsPage() {
                 }}
               />
               {formData.image && (
-                <img src={formData.image} className="mt-2 w-32 h-32 object-cover" />
+                <img alt="preview" src={formData.image} className="mt-2 w-32 h-32 object-cover" />
               )}
             </div>
 
-            <InputField label="Features" value={formData.features} onChange={(v: string) =>
-    setFormData({ ...formData, model: v })
-  } />
 
             <Button type="submit">
               {editingId ? "Update Product" : "Add Product"}
@@ -241,7 +234,7 @@ export default function AdminProductsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {products.map((p) => (
           <Card key={p._id}>
-            <img src={p.image} className="h-48 w-full object-cover" />
+            <img alt="" src={p.image} className="h-48 w-full object-cover" />
             <div className="p-4 space-y-2">
               <h3 className="font-semibold">{p.name}</h3>
               <p>{p.model}</p>

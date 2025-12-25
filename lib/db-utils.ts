@@ -13,7 +13,6 @@ export interface GeyserProduct {
   description: string;
   price: string;
   image: string;
-  features: string[];
   specs: {
     capacity: string;
     warranty: string;
@@ -30,7 +29,6 @@ export interface Product {
   price: number
   image?: string
   description?: string
-  features?: string[]
   createdAt?: string
   updatedAt?: string
 }
