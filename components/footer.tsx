@@ -15,22 +15,22 @@ export function Footer() {
           <h4 className="text-[10px] uppercase tracking-widest mb-6">Support</h4>
           <ul className="space-y-3 text-sm font-light">
             <li>
-              <Link href="/installation" className="hover:text-primary transition-colors">
+              <Link href="#" className="hover:text-primary transition-colors">
                 Installation
               </Link>
             </li>
             <li>
-              <Link href="/maintenance" className="hover:text-primary transition-colors">
+              <Link href="#" className="hover:text-primary transition-colors">
                 Maintenance
               </Link>
             </li>
             <li>
-              <Link href="/warranty" className="hover:text-primary transition-colors">
+              <Link href="#" className="hover:text-primary transition-colors">
                 Warranty
               </Link>
             </li>
             <li>
-              <Link href="/faq" className="hover:text-primary transition-colors">
+              <Link href="#" className="hover:text-primary transition-colors">
                 FAQ
               </Link>
             </li>
@@ -52,12 +52,12 @@ export function Footer() {
       </div>
       <div className="flex flex-col md:row items-center justify-between pt-12 border-t border-border gap-4">
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-          © 2025 AquaFlow Studios. All rights reserved.
+          © 2026 YESHA ENTERPRISES. All rights reserved.
         </p>
         <div className="flex gap-8 text-[10px] uppercase tracking-widest text-muted-foreground">
-          <Link href="/instagram">Instagram</Link>
-          <Link href="/twitter">Twitter</Link>
-          <Link href="/linkedin">Linkedin</Link>
+          <Link href="#">Instagram</Link>
+          <Link href="#">Twitter</Link>
+          <Link href="#">Linkedin</Link>
         </div>
       </div>
     </footer>
