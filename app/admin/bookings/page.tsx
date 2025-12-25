@@ -143,7 +143,23 @@ export default function AdminBookingsPage() {
                 </Select>
 
                 <a
-                  href={`https://wa.me/91${booking.phone ? booking.phone.replace(/\D/g, "") : ""}`}
+                  href={`https://wa.me/91${booking.phone ? booking.phone.replace(/\D/g, "") : ""}?text=${encodeURIComponent(
+                    `📌 *YESHA ENTERPRISES Installation Request*
+
+                      🛠️ *Model:* ${booking.model || "General Inquiry"}
+                      📝 *Series:* ${booking.series || "-"}
+                      📏 *Capacity:* ${booking.capacity || "-"}
+
+                      👤 *Customer Name:* ${booking.name}
+                      📞 *Phone:* ${booking.phone}
+                      ✉️ *Email:* ${booking.email}
+
+                      📅 *Preferred Installation Date:* ${booking.date}
+                      🏠 *Installation Address:* ${booking.address}
+
+                      ────────────────────
+                      ✅ Please confirm the appointment.`
+                                        )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -156,6 +172,7 @@ export default function AdminBookingsPage() {
                     WhatsApp
                   </Button>
                 </a>
+
               </div>
 
               {/* Created At */}

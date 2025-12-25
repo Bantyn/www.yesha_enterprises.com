@@ -28,27 +28,19 @@ export function BookingModal() {
 
   useEffect(() => {
     if (isBookingOpen) {
-      // Scroll to top
       window.scrollTo({ top: 0, behavior: "instant" })
-
-      // Lock background scroll
       document.body.style.overflow = "hidden"
     } else {
-      // Restore scroll
       document.body.style.overflow = ""
     }
-
     return () => {
       document.body.style.overflow = ""
     }
   }, [isBookingOpen])
   if (!isBookingOpen) return null
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    // Save booking to MongoDB
     try {
       await fetch("/api/bookings", {
         method: "POST",
@@ -66,17 +58,24 @@ export function BookingModal() {
       console.error("[v0] Error saving booking:", error)
     }
 
-    const whatsappNumber = "9909914197"
-    const message = `*YESHA ENTERPRISES Installation Request*
------------------------------
-*Model:* ${selectedModel?.name || "General Inquiry"}
-*Customer :* ${customerName}
-*Phone :* ${customerPhone}
-*Email :* ${customerEmail}
-*Date :* ${preferredDate}
-*Address :* ${address}
------------------------------
-Please confirm the appointment.`
+    const whatsappNumber = "9825400630"
+   const message = `📌 *YESHA ENTERPRISES Installation Request*
+
+🛠️ *Model:* ${selectedModel?.name || "General Inquiry"}
+📝 *Series:* ${selectedModel?.series || "-"}
+📏 *Capacity:* ${selectedModel?.capacity || "-"}
+
+👤 *Customer Name:* ${customerName}
+📞 *Phone:* ${customerPhone}
+✉️ *Email:* ${customerEmail}
+
+📅 *Preferred Installation Date:* ${preferredDate}
+🏠 *Installation Address:* ${address}
+
+────────────────────
+✅ Please confirm the appointment.
+`;
+
 
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
 
