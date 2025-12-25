@@ -59,22 +59,18 @@ export function BookingModal() {
     }
 
     const whatsappNumber = "9825400630"
-   const message = `📌 *YESHA ENTERPRISES Installation Request*
+   const message = `*YESHA_ENTERPRISES Geyser installation Request*
 
-🛠️ *Model:* ${selectedModel?.name || "General Inquiry"}
-📝 *Series:* ${selectedModel?.series || "-"}
-📏 *Capacity:* ${selectedModel?.capacity || "-"}
-
-👤 *Customer Name:* ${customerName}
-📞 *Phone:* ${customerPhone}
-✉️ *Email:* ${customerEmail}
-
-📅 *Preferred Installation Date:* ${preferredDate}
-🏠 *Installation Address:* ${address}
-
+*Model:* ${selectedModel?.name || "General Inquiry"}
+*Series:* ${selectedModel?.series || "-"}
+*Capacity:* ${selectedModel?.capacity || "-"}
+*Customer Name:* ${customerName}
+*Phone:* ${customerPhone}
+*Email:* ${customerEmail}
+*Preferred Installation Date:* ${preferredDate}
+*Installation Address:* ${address}
 ────────────────────
-✅ Please confirm the appointment.
-`;
+Please confirm the appointment.`;
 
 
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
