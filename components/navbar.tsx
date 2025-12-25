@@ -16,6 +16,9 @@ export function Navbar() {
       </Link>
 
       <div className="hidden md:flex gap-12 items-center text-[15px] uppercase tracking-widest text-muted-foreground">
+        <Link href="/" className="hover:text-primary transition-colors">
+          Home
+        </Link>
         <Link href="/technology" className="hover:text-primary transition-colors">
           Technology
         </Link>
