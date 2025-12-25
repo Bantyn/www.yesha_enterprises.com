@@ -1,103 +1,183 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useEffect, useState } from "react"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
+import { ArrowRight, Calendar } from "lucide-react"
+import { useBooking, type GeyserModel } from "@/hooks/use-booking"
+import type { Product } from "@/lib/db-schemas"
+
+export default function LandingPage() {
+  const openBooking = useBooking((state) => state.openBooking)
+  const [featuredProducts, setFeaturedProducts] = useState<GeyserModel[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchFeaturedProducts() {
+      try {
+        const response = await fetch("/api/products")
+        const { products } = await response.json()
+
+        // Convert Product[] to GeyserModel[] and take first 3
+        const models: GeyserModel[] = products.slice(0, 3).map((p: Product) => ({
+          id: p._id || "",
+          name: p.name,
+          series: p.category,
+          capacity: p.capacity,
+          image: p.image,
+          price: `₹${p.price.toLocaleString()}`,
+        }))
+
+        setFeaturedProducts(models)
+      } catch (error) {
+        console.error("[v0] Error fetching products:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchFeaturedProducts()
+  }, [])
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+   <main className="min-h-screen font-sans bg-background text-foreground">
+  <Navbar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  {/* Hero Section */}
+  <section className="px-6 py-0 text-center max-w-5xl mx-auto">
+    <div className="bg-card backdrop-blur-md rounded-lg p-12  animate-in fade-in slide-in-from-bottom-8 duration-1000">
+      <div className="mt-20">
+      <h1 className="text-5xl md:text-8xl leading-[1.1] mb-8 text-balance font-bold ">
+        Optimal warmth meets exquisite design
+      </h1>
+      <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 font-light">
+        Transform your morning rituals with AquaFlow's high-efficiency gas geysers. Precision engineering for the
+        modern home.
+      </p>
+      </div>
+
+      <div className="flex flex-col md:flex-row items-center justify-center gap-12 mt-70">
+        <button
+          onClick={() => openBooking()}
+          className="group cursor-pointer bg-transparent border-none"
+        >
+          <span className="text-[15px] uppercase tracking-widest block mb-4 group-hover:text-primary transition-colors">
+            Request Quote
+          </span>
+          <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center mx-auto bg-card/50 backdrop-blur-md group-hover:bg-primary group-hover:text-white transition-all transform group-hover:scale-110 shadow-sm">
+            <ArrowRight className="w-4 h-4" />
+          </div>
+        </button>
+
+        <div className="relative w-full max-w-2xl aspect-square overflow-hidden rounded-lg bg-card/40 backdrop-blur-md group shadow-lg">
+          <img
+            src="/landing_image.png"
+            alt="Premium Gas Geyser"
+            className="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105 animate-float"
+          />
+          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        <button
+          onClick={() => document.getElementById("collection")?.scrollIntoView({ behavior: "smooth" })}
+          className="group cursor-pointer bg-transparent border-none"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <span className="text-[15px] uppercase tracking-widest block mb-4 group-hover:text-primary transition-colors">
+            View Collection
+          </span>
+          <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center mx-auto bg-card/50 backdrop-blur-md group-hover:bg-primary group-hover:text-white transition-all transform group-hover:scale-110 shadow-sm">
+            <ArrowRight className="w-4 h-4" />
+          </div>
+        </button>
+      </div>
     </div>
-  );
+  </section>
+
+  {/* Stats Section */}
+  <section className="py-24 px-30 overflow-hidden">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {[
+        { label: "Instant ignition time", value: "0.5s" },
+        { label: "Energy efficiency rating", value: "98%" },
+        { label: "Seamless warranty", value: "5yr" },
+        { label: "Continuous flow rate", value: "12L" },
+      ].map((stat, i) => (
+        <div
+          key={i}
+          className=" backdrop-blur-md p-8 md:p-12 rounded-4xl border border-neutral-500/30 hover:translate-y-1 hover:shadow-lg transition-all group"
+        >
+          <div className="text-4xl mb-2 text-primary">{stat.value}</div>
+          <p className="text-sm text-muted-foreground uppercase tracking-tighter">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* Product Categories */}
+  <section id="collection" className="px-6 py-24 md:px-12 max-w-7xl mx-auto">
+    <div className="flex justify-between items-end mb-16">
+      <div>
+        <span className="text-[10px] uppercase tracking-widest text-primary mb-2 block">Curated Selection</span>
+        <h2 className="text-4xl md:text-6xl">Top Collection</h2>
+      </div>
+    </div>
+
+    {loading ? (
+      <div className="flex items-center justify-center min-h-[40vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+      </div>
+    ) : (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {featuredProducts.map((model, idx) => (
+          <div
+            key={model.id}
+            className="group cursor-pointer p-10 bg-neutral-200/10 border border-neutral-200 rounded-4xl"
+            style={{ animationDelay: `${idx * 150}ms` }}
+          >
+            <div className="bg-card/30 backdrop-blur-md p-8 rounded-lg text-center relative overflow-hidden mb-6 aspect-square flex items-center justify-center hover:translate-y-1 hover:shadow-xl transition-all">
+              <img
+                src={model.image || "/placeholder.svg"}
+                alt={model.name}
+                className="mb-8 mix-blend-multiply group-hover:scale-110 transition-transform duration-700"
+              />
+              <button
+                onClick={() => openBooking(model)}
+                className="absolute bottom-0 left-0 w-full bg-primary text-primary-foreground py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] font-bold rounded-b-lg"
+              >
+                <Calendar className="w-4 h-4" />
+                Book Appointment
+              </button>
+            </div>
+            <span className="text-[11px] uppercase tracking-widest text-muted-foreground">{model.series}</span>
+            <div className="flex justify-between items-center mt-2">
+              <h3 className="text-2xl">{model.name}</h3>
+              <span className="text-sm font-light text-muted-foreground">{model.capacity}</span>
+              <h3 className="text-sm font-light text-muted-foreground">{model.price}</h3>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+
+  {/* CTA Section */}
+  <section className="px-6 py-32 text-center">
+    <div className="bg-card/30 backdrop-blur-md  p-12 ">
+      <h2 className="text-4xl md:text-6xl mb-8 text-balance max-w-4xl mx-auto">
+        Elevate your home with AquaFlow expertise
+      </h2>
+      <button
+        onClick={() => openBooking()}
+        className="bg-primary text-primary-foreground px-22 py-5 mb-30 rounded-lg uppercase tracking-widest text-sm font-medium hover:bg-primary/90 hover:scale-105 transition-all"
+      >
+        Schedule Installation
+      </button>
+    </div>
+  </section>
+
+  {/* Footer */}
+  <Footer />
+</main>
+
+  )
 }
