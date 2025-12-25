@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 import { MongoClient, ObjectId } from "mongodb"
 import fs from "fs"
 import path from "path"
-
+import cloudinary from "@/lib/cloudinary";
 /* ----------------------------------
    MongoDB Connection (Cached)
 ---------------------------------- */
@@ -83,12 +83,19 @@ export async function POST(req: Request) {
     const imageFile = formData.get("image") as File | null
 
     if (imageFile && imageFile.size > 0) {
-      await ensureUploadDir()
-      const buffer = Buffer.from(await imageFile.arrayBuffer())
-      const fileName = `${Date.now()}-${imageFile.name}`
-      fs.writeFileSync(path.join(UPLOAD_DIR, fileName), buffer)
-      image = `/tmp/uploads/${fileName}`
+  const buffer = Buffer.from(await imageFile.arrayBuffer());
+
+  const uploadResult = await cloudinary.uploader.upload_stream(
+    { folder: "products" },
+    (error, result) => {
+      if (error) throw error;
+      return result;
     }
+  );
+
+  // Set image URL
+  image = uploadResult.secure_url;
+}
 
     const client = await clientPromise
     const db = client.db(DB_NAME)
