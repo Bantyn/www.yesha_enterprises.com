@@ -105,7 +105,7 @@ export function BookingModal() {
         {isSubmitted ? (
           <div className="px-6 py-24 text-center animate-in fade-in zoom-in duration-500">
             <MessageCircle className="w-16 h-16 text-primary mx-auto mb-6" />
-            <h3 className="text-3xl mb-4">Opening WhatsApp...</h3>
+            <h3 className="text-3xl  mb-4">Opening WhatsApp...</h3>
             <p className="text-muted-foreground">Redirecting you to our team to finalize your installation details.</p>
           </div>
         ) : (
@@ -120,7 +120,7 @@ export function BookingModal() {
                     className="w-16 h-16 object-cover rounded-sm"
                   />
                   <div>
-                    <h3 className= text-lg">{selectedModel.name}</h3>
+                    <h3 className=" text-lg">{selectedModel.name}</h3>
                     <p className="text-sm text-muted-foreground">
                       {selectedModel.series} • {selectedModel.capacity}
                     </p>
