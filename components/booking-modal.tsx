@@ -93,7 +93,7 @@ export function BookingModal() {
     <div className="fixed inset-0 bg-black/20 z-50 flex items-center max-h-screen justify-center p-4 animate-in fade-in duration-300">
       <div className="bg-background max-w-2xl w-full rounded-sm shadow-2xl  overflow-y-auto animate-in slide-in-from-bottom-4 duration-500">
         <div className="sticky top-0 bg-background border-b border-border px-6 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-serif">Book Installation</h2>
+          <h2 className="text-2xl ">Book Installation</h2>
           <button
             onClick={closeBooking}
             className="w-8 h-8 rounded-full hover:bg-secondary transition-colors flex items-center justify-center"
@@ -105,7 +105,7 @@ export function BookingModal() {
         {isSubmitted ? (
           <div className="px-6 py-24 text-center animate-in fade-in zoom-in duration-500">
             <MessageCircle className="w-16 h-16 text-primary mx-auto mb-6" />
-            <h3 className="text-3xl font-serif mb-4">Opening WhatsApp...</h3>
+            <h3 className="text-3xl mb-4">Opening WhatsApp...</h3>
             <p className="text-muted-foreground">Redirecting you to our team to finalize your installation details.</p>
           </div>
         ) : (
@@ -120,7 +120,7 @@ export function BookingModal() {
                     className="w-16 h-16 object-cover rounded-sm"
                   />
                   <div>
-                    <h3 className="font-serif text-lg">{selectedModel.name}</h3>
+                    <h3 className= text-lg">{selectedModel.name}</h3>
                     <p className="text-sm text-muted-foreground">
                       {selectedModel.series} • {selectedModel.capacity}
                     </p>
@@ -172,7 +172,7 @@ export function BookingModal() {
                     value={customerPhone}
                     onChange={(e) => setCustomerPhone(e.target.value)}
                     className="w-full bg-transparent border-b border-border pb-2 outline-none focus:border-primary transition-colors"
-                    placeholder="+1 (555) 000-0000"
+                    placeholder="+91 00000 00000"
                   />
                 </div>
 
