@@ -7,13 +7,16 @@ import path from "path";
 /* ----------------------------------
    MongoDB Connection
 ---------------------------------- */
-const MONGODB_URI = process.env.MONGODB_URI;
-const DB_NAME = process.env.MONGODB_DB;
+const MONGO_URI = process.env.MONGODB_URI
+const DB_NAME = process.env.MONGODB_DB || "yesha-enterprises"
 
+if (!MONGO_URI) {
+  throw new Error("❌ MONGODB_URI is not defined")
+}
 let clientPromise: Promise<MongoClient>;
 
 if (!(globalThis as any)._mongoClientPromise) {
-  const client = new MongoClient(MONGODB_URI);
+  const client = new MongoClient(MONGO_URI);
   (globalThis as any)._mongoClientPromise = client.connect();
 }
 

@@ -21,6 +21,19 @@ export interface GeyserProduct {
   };
   createdAt: Date;
 }
+export interface Product {
+  _id: string
+  name: string
+  model: string        
+  category: string
+  capacity: string
+  price: number
+  image?: string
+  description?: string
+  features?: string[]
+  createdAt?: string
+  updatedAt?: string
+}
 
 export interface BookingRequest {
   _id?: string;
@@ -35,15 +48,6 @@ export interface BookingRequest {
   createdAt: Date;
 }
 // lib/db-schemas.ts
-
-export type Product = {
-  _id?: string;
-  name: string;
-  price: number;
-  category: string;
-  image: string;
-  description?: string;
-};
 
 export const PRODUCT_CATEGORIES = [
   "Gas Geyser",

@@ -188,8 +188,8 @@ export default function AdminProductsPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <InputField label="Name" value={formData.name} onChange={(v) => setFormData({ ...formData, name: v })} />
-            <InputField label="Model" value={formData.model} onChange={(v) => setFormData({ ...formData, model: v })} />
+            <InputField label="Name" value={formData.name} onChange={(v: string) => setFormData({ ...formData, name: v })} />
+            <InputField label="Model" value={formData.model} onChange={(v: string) => setFormData({ ...formData, model: v })} />
 
             <div>
               <Label>Category</Label>
@@ -203,8 +203,8 @@ export default function AdminProductsPage() {
               </Select>
             </div>
 
-            <InputField label="Capacity" value={formData.capacity} onChange={(v) => setFormData({ ...formData, capacity: v })} />
-            <InputField label="Price" type="number" value={formData.price} onChange={(v) => setFormData({ ...formData, price: Number(v) })} />
+            <InputField label="Capacity" value={formData.capacity} onChange={(v:string) => setFormData({ ...formData, capacity: v })} />
+            <InputField label="Price" type="number" value={formData.price} onChange={(v: string) => setFormData({ ...formData, price: Number(v) })} />
 
             <div>
               <Label>Image</Label>
@@ -227,7 +227,9 @@ export default function AdminProductsPage() {
               )}
             </div>
 
-            <InputField label="Features" value={formData.features} onChange={(v) => setFormData({ ...formData, features: v })} />
+            <InputField label="Features" value={formData.features} onChange={(v: string) =>
+    setFormData({ ...formData, model: v })
+  } />
 
             <Button type="submit">
               {editingId ? "Update Product" : "Add Product"}
