@@ -1,31 +1,31 @@
-import { create } from "zustand"
+import { create } from "zustand";
 
 export type GeyserModel = {
-  id: string
-  name: string
-  series: string
-  capacity: string
-  image: string
-  price: string
-}
+  id: string;
+  name: string;
+  series: string;
+  capacity: string;
+  image: string;
+  price: string;
+};
 
 interface BookingStore {
-  isOpen: boolean
-  selectedModel: GeyserModel | null
-  customerName: string
-  customerEmail: string
-  customerPhone: string
-  preferredDate: string
-  address: string
-  openBooking: (model?: GeyserModel) => void
-  closeBooking: () => void
-  setSelectedModel: (model: GeyserModel | null) => void
-  setCustomerName: (name: string) => void
-  setCustomerEmail: (email: string) => void
-  setCustomerPhone: (phone: string) => void
-  setPreferredDate: (date: string) => void
-  setAddress: (address: string) => void
-  resetBooking: () => void
+  isOpen: boolean;
+  selectedModel: GeyserModel | null;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  preferredDate: string;
+  address: string;
+  openBooking: (model?: GeyserModel) => void;
+  closeBooking: () => void;
+  setSelectedModel: (model: GeyserModel | null) => void;
+  setCustomerName: (name: string) => void;
+  setCustomerEmail: (email: string) => void;
+  setCustomerPhone: (phone: string) => void;
+  setPreferredDate: (date: string) => void;
+  setAddress: (address: string) => void;
+  resetBooking: () => void;
 }
 
 export const useBooking = create<BookingStore>((set) => ({
@@ -54,4 +54,4 @@ export const useBooking = create<BookingStore>((set) => ({
       preferredDate: "",
       address: "",
     }),
-}))
+}));

@@ -33,9 +33,9 @@ export default function AdminBookingsPage() {
   const updateStatus = async (id: string, status: string, notes?: string) => {
     try {
       await fetch(`/api/bookings?id=${id}`, {
-  method: "PUT",
-  body: JSON.stringify({ status, notes })
-})
+        method: "PUT",
+        body: JSON.stringify({ status, notes })
+      })
       fetchBookings()
     } catch (error) {
       console.error("[v0] Error updating booking:", error)
@@ -71,7 +71,7 @@ export default function AdminBookingsPage() {
           </h1>
           <p className="text-neutral-600 mt-1">{bookings.length} total requests</p>
         </div>
-        
+
       </div>
 
       {/* Bookings Grid */}

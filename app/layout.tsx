@@ -14,7 +14,7 @@ const instrumentSerif = Instrument_Serif({
 })
 
 export const metadata: Metadata = {
-  title: "AquaFlow | Premium Gas Water Geysers",
+  title: "Yesha Enterprises | Premium Gas Water Geysers",
   description: "Experience the next generation of home heating with AquaFlow's high-efficiency gas geysers.",
   generator: "v0.app",
   icons: {

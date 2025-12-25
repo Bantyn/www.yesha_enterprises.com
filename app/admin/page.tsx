@@ -22,38 +22,38 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function fetchStats() {
-  try {
-    const [productsRes, bookingsRes] = await Promise.all([
-      fetch("/api/products"),
-      fetch("/api/bookings"),
-    ])
+      try {
+        const [productsRes, bookingsRes] = await Promise.all([
+          fetch("/api/products"),
+          fetch("/api/bookings"),
+        ])
 
-    if (!productsRes.ok || !bookingsRes.ok) {
-      console.error("Failed to fetch API routes", { productsRes, bookingsRes })
-      return
+        if (!productsRes.ok || !bookingsRes.ok) {
+          console.error("Failed to fetch API routes", { productsRes, bookingsRes })
+          return
+        }
+
+        const productsData = await productsRes.json()
+        const bookingsData = await bookingsRes.json()
+
+        const products = productsData.products || []
+        const bookings = bookingsData.bookings || []
+
+        const now = new Date()
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+
+        setStats({
+          totalProducts: products.length,
+          totalBookings: bookings.length,
+          pendingBookings: bookings.filter((b: any) => b.status === "pending").length,
+          recentBookings: bookings.filter((b: any) => new Date(b.createdAt) > weekAgo).length,
+        })
+      } catch (error) {
+        console.error("[v0] Error fetching stats:", error)
+      } finally {
+        setLoading(false)
+      }
     }
-
-    const productsData = await productsRes.json()
-    const bookingsData = await bookingsRes.json()
-
-    const products = productsData.products || []
-    const bookings = bookingsData.bookings || []
-
-    const now = new Date()
-    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
-
-    setStats({
-      totalProducts: products.length,
-      totalBookings: bookings.length,
-      pendingBookings: bookings.filter((b: any) => b.status === "pending").length,
-      recentBookings: bookings.filter((b: any) => new Date(b.createdAt) > weekAgo).length,
-    })
-  } catch (error) {
-    console.error("[v0] Error fetching stats:", error)
-  } finally {
-    setLoading(false)
-  }
-}
 
 
     fetchStats()

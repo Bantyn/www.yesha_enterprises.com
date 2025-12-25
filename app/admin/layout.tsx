@@ -66,10 +66,7 @@ export default function AdminLayout({
           </Button>
         </div>
         </nav>
-
-       
       </aside>
-
       {/* Main Content */}
       <main className="ml-64 p-8">{children}</main>
     </div>

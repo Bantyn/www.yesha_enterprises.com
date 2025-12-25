@@ -62,10 +62,9 @@ export default function CollectionPage() {
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-6 py-2 rounded-full text-[11px] uppercase tracking-widest transition-all
-                  ${
-                    active
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-neutral-200 hover:bg-background border border-border"
+                  ${active
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "bg-neutral-200 hover:bg-background border border-border"
                   }
                 `}
               >

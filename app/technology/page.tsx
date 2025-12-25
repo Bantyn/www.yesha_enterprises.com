@@ -88,6 +88,6 @@ export default function TechnologyPage() {
       </section>
       <Footer></Footer>
     </main>
-    
+
   )
 }

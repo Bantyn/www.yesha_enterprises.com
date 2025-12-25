@@ -3,7 +3,7 @@
 import type React from "react"
 import { useBooking } from "@/hooks/use-booking"
 import { X, Calendar, User, Mail, Phone, MapPin, MessageCircle } from "lucide-react"
-import { useState,useEffect } from "react"
+import { useState, useEffect } from "react"
 
 export function BookingModal() {
   const {
@@ -22,26 +22,26 @@ export function BookingModal() {
     closeBooking,
     resetBooking,
   } = useBooking()
-  
+
 
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   useEffect(() => {
-  if (isBookingOpen) {
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: "instant" })
+    if (isBookingOpen) {
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: "instant" })
 
-    // Lock background scroll
-    document.body.style.overflow = "hidden"
-  } else {
-    // Restore scroll
-    document.body.style.overflow = ""
-  }
+      // Lock background scroll
+      document.body.style.overflow = "hidden"
+    } else {
+      // Restore scroll
+      document.body.style.overflow = ""
+    }
 
-  return () => {
-    document.body.style.overflow = ""
-  }
-}, [isBookingOpen])
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isBookingOpen])
   if (!isBookingOpen) return null
 
 
