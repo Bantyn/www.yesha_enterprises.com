@@ -48,6 +48,7 @@
     "formidable": "^3.5.4",
     "framer-motion": "^12.23.26",
     "fs-extra": "^11.3.3",
+    "googleapis": "^169.0.0",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "mongodb": "7.0.0",

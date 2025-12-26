@@ -1,7 +1,6 @@
-// app/api/products/route.ts
 import { NextResponse } from "next/server";
 import { MongoClient, ObjectId } from "mongodb";
-import cloudinary from "@/lib/cloudinary";
+import { uploadToDrive } from "@/lib/googleDrive";
 
 /* ----------------------------------
    MongoDB Connection (Cached)
@@ -18,24 +17,16 @@ declare global {
 }
 
 let clientPromise: Promise<MongoClient>;
+
 if (!global._mongoClientPromise) {
   const client = new MongoClient(MONGO_URI);
   global._mongoClientPromise = client.connect();
 }
+
 clientPromise = global._mongoClientPromise;
 
-/* ----------------------------------
-   Cloudinary Upload Helper
----------------------------------- */
-function uploadToCloudinary(buffer: Buffer, folder = "products"): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream({ folder }, (error, result) => {
-      if (error || !result) return reject(error);
-      resolve(result.secure_url);
-    });
-    stream.end(buffer);
-  });
-}
+// 👇 your Google Drive folder ID
+const DRIVE_FOLDER_ID = "172ih8oNiGJZEywXVLNXIxXywpt3BpUWE";
 
 /* ----------------------------------
    GET: Fetch Products
@@ -54,7 +45,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ products });
   } catch (error) {
     console.error("GET products error:", error);
-    return NextResponse.json({ products: [], error: "Failed to fetch products" }, { status: 500 });
+    return NextResponse.json({ products: [] }, { status: 500 });
   }
 }
 
@@ -76,7 +67,7 @@ export async function POST(req: Request) {
 
     if (imageFile && imageFile.size > 0) {
       const buffer = Buffer.from(await imageFile.arrayBuffer());
-      image = await uploadToCloudinary(buffer, "products");
+      image = await uploadToDrive(buffer, imageFile.name, DRIVE_FOLDER_ID);
     }
 
     const client = await clientPromise;
@@ -92,10 +83,17 @@ export async function POST(req: Request) {
       createdAt: new Date().toISOString(),
     });
 
-    return NextResponse.json({ success: true, _id: result.insertedId, image });
+    return NextResponse.json({
+      success: true,
+      _id: result.insertedId,
+      image,
+    });
   } catch (error) {
     console.error("POST product error:", error);
-    return NextResponse.json({ success: false, error: "Failed to add product" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to add product" },
+      { status: 500 }
+    );
   }
 }
 
@@ -108,30 +106,47 @@ export async function PUT(req: Request) {
     const id = String(formData.get("_id") || "");
 
     if (!id) {
-      return NextResponse.json({ success: false, error: "Product ID required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Product ID required" },
+        { status: 400 }
+      );
     }
 
     const updateData: Record<string, any> = {};
+
     for (const field of ["name", "model", "category", "capacity", "price"]) {
       const value = formData.get(field);
-      if (value) updateData[field] = field === "price" ? Number(value) : String(value);
+      if (value) {
+        updateData[field] =
+          field === "price" ? Number(value) : String(value);
+      }
     }
 
     const imageFile = formData.get("image") as File | null;
     if (imageFile && imageFile.size > 0) {
       const buffer = Buffer.from(await imageFile.arrayBuffer());
-      updateData.image = await uploadToCloudinary(buffer, "products");
+      updateData.image = await uploadToDrive(
+        buffer,
+        imageFile.name,
+        DRIVE_FOLDER_ID
+      );
     }
 
     const client = await clientPromise;
     const db = client.db(DB_NAME);
 
-    await db.collection("products").updateOne({ _id: new ObjectId(id) }, { $set: updateData });
+    await db.collection("products").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updateData }
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("PUT product error:", error);
-    return NextResponse.json({ success: false, error: "Failed to update product" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to update product" },
+      { status: 500 }
+    );
   }
 }
 
@@ -144,17 +159,25 @@ export async function DELETE(req: Request) {
     const id = searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json({ success: false, error: "Product ID required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Product ID required" },
+        { status: 400 }
+      );
     }
 
     const client = await clientPromise;
     const db = client.db(DB_NAME);
 
-    await db.collection("products").deleteOne({ _id: new ObjectId(id) });
+    await db.collection("products").deleteOne({
+      _id: new ObjectId(id),
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("DELETE product error:", error);
-    return NextResponse.json({ success: false, error: "Failed to delete product" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to delete product" },
+      { status: 500 }
+    );
   }
 }
