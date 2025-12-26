@@ -1,4 +1,5 @@
 import { google } from "googleapis";
+import { Readable } from "stream";
 
 const auth = new google.auth.JWT({
   email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -8,31 +9,40 @@ const auth = new google.auth.JWT({
 
 const drive = google.drive({ version: "v3", auth });
 
+function bufferToStream(buffer: Buffer) {
+  const stream = new Readable();
+  stream.push(buffer);
+  stream.push(null);
+  return stream;
+}
+
 export async function uploadToDrive(
   buffer: Buffer,
   fileName: string,
   folderId: string
 ) {
-  const file = await drive.files.create({
+  const response = await drive.files.create({
     requestBody: {
       name: fileName,
       parents: [folderId],
     },
     media: {
       mimeType: "image/jpeg",
-      body: buffer,
+      body: bufferToStream(buffer), // ✅ FIX HERE
     },
-    fields: "id, webViewLink, webContentLink",
+    fields: "id",
   });
 
-  // make public
+  const fileId = response.data.id!;
+
+  // Make public
   await drive.permissions.create({
-    fileId: file.data.id!,
+    fileId,
     requestBody: {
       role: "reader",
       type: "anyone",
     },
   });
 
-  return file.data.webContentLink!;
+  return `https://drive.google.com/uc?id=${fileId}`;
 }
