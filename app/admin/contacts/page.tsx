@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,7 @@ const highlightText = (text: string, query: string) => {
   )
 }
 
-export default function AdminContactsPage() {
+function AdminContactsContent() {
   const [contacts, setContacts] = useState<ContactRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedContact, setSelectedContact] = useState<ContactRequest | null>(null)
@@ -261,5 +261,13 @@ export default function AdminContactsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AdminContactsPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+      <AdminContactsContent />
+    </Suspense>
   )
 }
