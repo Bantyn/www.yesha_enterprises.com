@@ -240,7 +240,7 @@ export default function LandingPage() {
 
       {/* Hero / CTA Section */}
 <motion.section
-  className="relative px-6 py-24 md:py-36"
+  className="relative px-6 py-24 md:py-36 overflow-hidden"
   initial={{ opacity: 0 }}
   whileInView={{ opacity: 1 }}
   transition={{ duration: 0.8 }}

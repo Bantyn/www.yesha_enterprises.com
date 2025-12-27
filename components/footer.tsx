@@ -3,7 +3,7 @@ import Link from "next/link"
 
 export function Footer() {
   return (
-    <footer className="px-6 py-12 md:px-12 border-t border-border mt-24 bg-transparent">
+    <footer className="px-6 py-12 md:px-12 border-t border-border mt-24 bg-transparent ">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
         <div className="col-span-1 md:col-span-2">
           <h2 className="text-2xl font-bold uppercase mb-4 font-sans tracking-tighter">YESHA ENTERPRISES</h2>
