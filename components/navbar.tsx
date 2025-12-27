@@ -25,6 +25,9 @@ export function Navbar() {
         <Link href="/collection" className="hover:text-primary transition-colors">
           Collection
         </Link>
+        <Link href="/contact" className="hover:text-primary transition-colors">
+          Contact
+        </Link>
         <Link href="/support" className="hover:text-primary transition-colors">
           Support
         </Link>
@@ -33,25 +36,30 @@ export function Navbar() {
       <div className="flex items-center gap-6 ">
         <button
           onClick={() => openBooking()}
-          className="text-sm font-medium  hover:text-primary transition-colors relative group"
+          className="text-sm font-medium border-1 p-1.5  hover:text-primary transition-all relative  duration-200"
         >
           Book Installation
-          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
         </button>
-        <button className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        <button className="md:hidden bg-primary p-1.5 text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          {isMobileMenuOpen ? <X className="w-6 h-6 " /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
       {isMobileMenuOpen && (
         <div className="absolute top-full left-0 w-full bg-background border-b border-border p-6 flex flex-col gap-6 animate-in slide-in-from-top duration-300 md:hidden shadow-xl">
-          <Link href="/technology" className="text-lg font-serif" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link href="/" className="text-lg bg-neutral-200/60 p-2 hover:bg-neutral-200/90 transition-all duration-300 pl-4 hover:pl-6 rounded-xl" onClick={() => setIsMobileMenuOpen(false)}>
+            Home
+          </Link>
+          <Link href="/technology" className="text-lg bg-neutral-200/60 p-2 hover:bg-neutral-200/90 transition-all duration-300 pl-4 hover:pl-6 rounded-xl" onClick={() => setIsMobileMenuOpen(false)}>
             Technology
           </Link>
-          <Link href="/collection" className="text-lg font-serif" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link href="/collection" className="text-lg bg-neutral-200/60 p-2 hover:bg-neutral-200/90 transition-all duration-300 pl-4 hover:pl-6 rounded-xl" onClick={() => setIsMobileMenuOpen(false)}>
             Collection
           </Link>
-          <Link href="/support" className="text-lg font-serif" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link href="/contact" className="text-lg bg-neutral-200/60 p-2 hover:bg-neutral-200/90 transition-all duration-300 pl-4 hover:pl-6 rounded-xl" onClick={() => setIsMobileMenuOpen(false)}>
+            Contact
+          </Link>
+          <Link href="/support" className="text-lg bg-neutral-200/60 p-2 hover:bg-neutral-200/90 transition-all duration-300 pl-4 hover:pl-6 rounded-xl" onClick={() => setIsMobileMenuOpen(false)}>
             Support
           </Link>
           <button

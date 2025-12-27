@@ -30,25 +30,7 @@ const FEATURES = [
 ]
 
 export default function TechnologyPage() {
-  const [maintenanceMode, setMaintenanceMode] = useState(false)
-
-  useEffect(() => {
-    async function fetchSettings() {
-      try {
-        const res = await fetch("/api/settings")
-        const data = await res.json()
-        setMaintenanceMode(data.maintenanceMode || false)
-      } catch (error) {
-        console.error("Error fetching settings:", error)
-      }
-    }
-
-    fetchSettings()
-  }, [])
-
-  if (maintenanceMode) {
-    return <MaintenanceScreen />
-  }
+  return (
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
 

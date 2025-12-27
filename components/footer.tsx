@@ -12,52 +12,76 @@ export function Footer() {
           </p>
         </div>
         <div>
-          <h4 className="text-[10px] uppercase tracking-widest mb-6">Support</h4>
+          <h4 className="text-[10px] uppercase tracking-widest mb-6">Quick Links</h4>
           <ul className="space-y-3 text-sm font-light">
             <li>
-              <Link href="#" className="hover:text-primary transition-colors">
-                Installation
+              <Link href="/" className="hover:text-primary transition-colors">
+                Home
               </Link>
             </li>
             <li>
-              <Link href="#" className="hover:text-primary transition-colors">
-                Maintenance
+              <Link href="/technology" className="hover:text-primary transition-colors">
+                Technology
               </Link>
             </li>
             <li>
-              <Link href="#" className="hover:text-primary transition-colors">
-                Warranty
+              <Link href="/collection" className="hover:text-primary transition-colors">
+                Collection
               </Link>
             </li>
             <li>
-              <Link href="#" className="hover:text-primary transition-colors">
-                FAQ
+              <Link href="/contact" className="hover:text-primary transition-colors">
+                Contact
+              </Link>
+            </li>
+            <li>
+              <Link href="/support" className="hover:text-primary transition-colors">
+                Support
               </Link>
             </li>
           </ul>
         </div>
         <div>
-          <h4 className="text-[10px] uppercase tracking-widest mb-6">Newsletter</h4>
-          <div className="relative border-b border-foreground/20 pb-2">
-            <input
-              type="email"
-              placeholder="Email"
-              className="bg-transparent w-full outline-none text-sm font-light"
-            />
-            <button className="absolute right-0 top-0">
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+          <h4 className="text-[10px] uppercase tracking-widest mb-6">Services</h4>
+          <ul className="space-y-3 text-sm font-light">
+            <li>
+              <Link href="/support" className="hover:text-primary transition-colors">
+                Installation
+              </Link>
+            </li>
+            <li>
+              <Link href="/support" className="hover:text-primary transition-colors">
+                Maintenance
+              </Link>
+            </li>
+            <li>
+              <Link href="/support" className="hover:text-primary transition-colors">
+                Warranty
+              </Link>
+            </li>
+            <li>
+              <Link href="/support" className="hover:text-primary transition-colors">
+                FAQ
+              </Link>
+            </li>
+          </ul>
         </div>
+       
       </div>
       <div className="flex flex-col md:row items-center justify-between pt-12 border-t border-border gap-4">
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
           © 2026 YESHA ENTERPRISES. All rights reserved.
         </p>
         <div className="flex gap-8 text-[10px] uppercase tracking-widest text-muted-foreground">
-          <Link href="#">Instagram</Link>
-          <Link href="#">Twitter</Link>
-          <Link href="#">Linkedin</Link>
+          <Link href="https://instagram.com/yeshaenterprises" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+            Instagram
+          </Link>
+          <Link href="https://twitter.com/yeshaenterprises" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+            Twitter
+          </Link>
+          <Link href="https://linkedin.com/company/yeshaenterprises" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+            LinkedIn
+          </Link>
         </div>
       </div>
     </footer>

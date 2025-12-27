@@ -6,42 +6,28 @@ import type { Product } from "@/lib/db-schemas"
 import { PRODUCT_CATEGORIES } from "@/lib/db-schemas"
 import { Footer } from "@/components/footer"
 import { motion, AnimatePresence } from "framer-motion"
-import MaintenanceScreen from "@/components/maintenance-screen"
 
 export default function CollectionPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [loading, setLoading] = useState(true)
-  const [maintenanceMode, setMaintenanceMode] = useState(false)
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchProducts() {
       setLoading(true)
       try {
-        const [productsRes, settingsRes] = await Promise.all([
-          fetch(selectedCategory === "all" ? "/api/products" : `/api/products?category=${encodeURIComponent(selectedCategory)}`),
-          fetch("/api/settings"),
-        ])
+        const url =
+          selectedCategory === "all"
+            ? "/api/products"
+            : `/api/products?category=${encodeURIComponent(selectedCategory)}`
 
-        const productsData = await productsRes.json()
-        const settingsData = await settingsRes.json()
-
-        setProducts(productsData.products || [])
-        setMaintenanceMode(settingsData.maintenanceMode || false)
+        const res = await fetch(url)
+        const data = await res.json()
+        setProducts(data.products || [])
       } catch (error) {
-        console.error("Error fetching data:", error)
+        console.error("Error fetching products:", error)
         setProducts([])
       } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [selectedCategory])
-
-  if (maintenanceMode) {
-    return <MaintenanceScreen />
-  }
         setLoading(false)
       }
     }

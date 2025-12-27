@@ -53,6 +53,30 @@ export type BookingDocument = BookingInsert & {
 }
 
 /* =======================
+   CONTACTS
+======================= */
+
+/* UI-safe contact */
+export type ContactRequest = {
+  _id?: string
+  name: string
+  email: string
+  phone?: string
+  subject: string
+  message: string
+  status: "unread" | "read" | "replied"
+  createdAt: string
+}
+
+/* Mongo insert */
+export type ContactInsert = Omit<ContactRequest, "_id">
+
+/* Mongo document */
+export type ContactDocument = ContactInsert & {
+  _id: ObjectId
+}
+
+/* =======================
    CONSTANTS
 ======================= */
 

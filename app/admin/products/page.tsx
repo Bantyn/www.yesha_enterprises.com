@@ -1,7 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,11 +18,23 @@ import { Plus, Edit, Trash2, X } from "lucide-react"
 import type { Product } from "@/lib/db-schemas"
 import { PRODUCT_CATEGORIES } from "@/lib/db-schemas"
 
-export default function AdminProductsPage() {
+// Helper function to highlight matching text
+const highlightText = (text: string, query: string) => {
+  if (!query || !text) return text
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+  const parts = text.split(regex)
+  return parts.map((part, index) =>
+    regex.test(part) ? <strong key={index}>{part}</strong> : part
+  )
+}
+
+function AdminProductsPageContent() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
+  const searchParams = useSearchParams()
 
   const [formData, setFormData] = useState<{
     name: string
@@ -59,6 +72,13 @@ export default function AdminProductsPage() {
   useEffect(() => {
     fetchProducts()
   }, [])
+
+  useEffect(() => {
+    const search = searchParams.get('search')
+    if (search) {
+      setSearchQuery(search)
+    }
+  }, [searchParams])
 
   /* ----------------------------------
      Submit (Add / Update)
@@ -164,6 +184,15 @@ export default function AdminProductsPage() {
         </Button>
       </div>
 
+      <div className="flex gap-4">
+        <Input
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="max-w-sm"
+        />
+      </div>
+
       {showForm && (
         <Card className="p-6">
           <div className="flex justify-between mb-4 border-neutral-500/50">
@@ -232,14 +261,21 @@ export default function AdminProductsPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {products.map((p) => (
+        {products
+          .filter((p) =>
+            !searchQuery ||
+            (p.name && typeof p.name === 'string' && p.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (p.model && typeof p.model === 'string' && p.model.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (p.category && typeof p.category === 'string' && p.category.toLowerCase().includes(searchQuery.toLowerCase()))
+          )
+          .map((p) => (
           <Card key={p._id}>
             <img alt="" src={p.image} className="h-48 w-full object-cover" />
             <div className="p-4 space-y-2">
-              <h3 className="font-semibold">{p.name}</h3>
-              <p>{p.model}</p>
+              <h3 className="font-semibold">{highlightText(p.name || '', searchQuery)}</h3>
+              <p>{highlightText(p.model || '', searchQuery)}</p>
               <div className="flex justify-between">
-                <span>{p.category}</span>
+                <span>{highlightText(p.category || '', searchQuery)}</span>
                 <span>₹{p.price}</span>
               </div>
               <div className="flex gap-2">
@@ -250,7 +286,34 @@ export default function AdminProductsPage() {
           </Card>
         ))}
       </div>
+
+      {products.filter((p) =>
+        !searchQuery ||
+        (p.name && typeof p.name === 'string' && p.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (p.model && typeof p.model === 'string' && p.model.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (p.category && typeof p.category === 'string' && p.category.toLowerCase().includes(searchQuery.toLowerCase()))
+      ).length === 0 && !loading && (
+        <div className="text-center py-12">
+          <div className="text-gray-400 text-6xl mb-4">📦</div>
+          <h3 className="text-xl font-semibold text-gray-600 mb-2">No products found</h3>
+          <p className="text-gray-500">
+            {searchQuery ? `No products match "${searchQuery}"` : "No products have been added yet"}
+          </p>
+        </div>
+      )}
     </div>
+  )
+}
+
+export default function AdminProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+      </div>
+    }>
+      <AdminProductsPageContent />
+    </Suspense>
   )
 }
 

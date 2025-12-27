@@ -1,17 +1,31 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Phone, Mail, MapPin, RefreshCw } from "lucide-react"
+import { Calendar, Phone, Mail, MapPin, RefreshCw, Trash2 } from "lucide-react"
 import { motion } from "framer-motion"
 import type { BookingRequest } from "@/lib/db-schemas"
 
-export default function AdminBookingsPage() {
+// Helper function to highlight matching text
+const highlightText = (text: string, query: string) => {
+  if (!query || !text) return text
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+  const parts = text.split(regex)
+  return parts.map((part, index) =>
+    regex.test(part) ? <strong key={index}>{part}</strong> : part
+  )
+}
+
+function AdminBookingsPageContent() {
   const [bookings, setBookings] = useState<BookingRequest[]>([])
   const [loading, setLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState("")
+  const searchParams = useSearchParams()
 
   const fetchBookings = async () => {
     try {
@@ -29,6 +43,13 @@ export default function AdminBookingsPage() {
   useEffect(() => {
     fetchBookings()
   }, [])
+
+  useEffect(() => {
+    const search = searchParams.get('search')
+    if (search) {
+      setSearchQuery(search)
+    }
+  }, [searchParams])
 
   const updateStatus = async (id: string, status: string, notes?: string) => {
     try {
@@ -74,6 +95,15 @@ export default function AdminBookingsPage() {
 
       </div>
 
+      <div className="flex gap-4">
+        <Input
+          placeholder="Search bookings..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="max-w-sm"
+        />
+      </div>
+
       {/* Bookings Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {bookings.length === 0 && (
@@ -83,7 +113,15 @@ export default function AdminBookingsPage() {
           </Card>
         )}
 
-        {bookings.map((booking, idx) => (
+        {bookings
+          .filter((booking) =>
+            !searchQuery ||
+            (booking.name && typeof booking.name === 'string' && booking.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (booking.email && typeof booking.email === 'string' && booking.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (booking.phone && typeof booking.phone === 'string' && booking.phone.includes(searchQuery)) ||
+            (booking._id && booking._id.toString().includes(searchQuery))
+          )
+          .map((booking, idx) => (
           <motion.div
             key={booking._id}
             initial={{ opacity: 0, y: 20 }}
@@ -95,8 +133,8 @@ export default function AdminBookingsPage() {
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="text-xl font-semibold text-neutral-900">{booking.name}</h3>
-                  <p className="text-accent font-medium mt-1">{booking.model}</p>
+                  <h3 className="text-xl font-semibold text-neutral-900">{highlightText(booking.name || '', searchQuery)}</h3>
+                  <p className="text-accent font-medium mt-1">{highlightText(booking.model || '', searchQuery)}</p>
                 </div>
                 <Badge className={`${getStatusColor(booking.status)} px-3 py-1 text-sm`}>
                   {booking.status}
@@ -107,11 +145,11 @@ export default function AdminBookingsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4  text-neutral-700">
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-neutral-900" />
-                  <span>{booking.phone}</span>
+                  <span>{highlightText(booking.phone || '', searchQuery)}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-neutral-900" />
-                  <span>{booking.email}</span>
+                  <span>{highlightText(booking.email || '', searchQuery)}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Calendar className="w-4 h-4 text-neutral-900" />
@@ -173,6 +211,22 @@ export default function AdminBookingsPage() {
                   </Button>
                 </a>
 
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => {
+                    if (confirm(`Delete booking for ${booking.name}?`)) {
+                      fetch(`/api/bookings?id=${booking._id}`, { method: "DELETE" })
+                        .then(() => fetchBookings())
+                        .catch(error => console.error("Delete error:", error))
+                    }
+                  }}
+                  className="gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </Button>
+
               </div>
 
               {/* Created At */}
@@ -186,5 +240,17 @@ export default function AdminBookingsPage() {
         ))}
       </div>
     </div>
+  )
+}
+
+export default function AdminBookingsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+      </div>
+    }>
+      <AdminBookingsPageContent />
+    </Suspense>
   )
 }

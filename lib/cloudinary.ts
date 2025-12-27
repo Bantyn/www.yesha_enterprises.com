@@ -30,3 +30,5 @@ export async function uploadToCloudinary(buffer: Buffer) {
 export async function deleteFromCloudinary(publicId: string) {
   await cloudinary.uploader.destroy(publicId)
 }
+
+export default cloudinary
