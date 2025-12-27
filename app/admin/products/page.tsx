@@ -270,10 +270,10 @@ function AdminProductsPageContent() {
           )
           .map((p) => (
           <Card key={p._id}>
-            <img alt="" src={p.image} className="h-48 w-full object-cover" />
+            <img alt="" src={p.image} className="h-80 w-full object-cover" />
             <div className="p-4 space-y-2">
               <h3 className="font-semibold">{highlightText(p.name || '', searchQuery)}</h3>
-              <p>{highlightText(p.model || '', searchQuery)}</p>
+              <p><span className="font-semibold">Model : </span>{highlightText(p.model || '', searchQuery)}</p>
               <div className="flex justify-between">
                 <span>{highlightText(p.category || '', searchQuery)}</span>
                 <span>₹{p.price}</span>

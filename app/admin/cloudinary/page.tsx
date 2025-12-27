@@ -88,10 +88,10 @@ export default function CloudinaryPage() {
                 />
               </div>
               <div className="space-y-2">
-                <div className="text-sm text-gray-600">
-                  <p>Size: {(image.bytes / 1024).toFixed(1)} KB</p>
-                  <p>{image.width} × {image.height}</p>
-                  <p>Created: {new Date(image.createdAt).toLocaleDateString()}</p>
+                <div className="text-sm text-gray-700">
+                  <p><span className="font-semibold">Size : </span>{(image.bytes / 1024).toFixed(1)} KB</p>
+                  <p><span className="font-semibold">Ratio : </span>{image.width} × {image.height}</p>
+                  <p><span className="font-semibold">Created : </span>{new Date(image.createdAt).toLocaleDateString()}</p>
                 </div>
                 <Button
                   variant="destructive"

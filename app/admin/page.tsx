@@ -396,24 +396,24 @@ export default function AdminDashboard() {
           <div className="space-y-3">
             <a
               href="/admin/products"
-              className="block p-4 bg-neutral-50 border border-primary/50 hover:-translate-y-1  hover:bg-primary rounded-lg transition-all duration-500 active:bg-primary/50 active:text-white"
+              className="block p-4 bg-neutral-50 text-neutral-900 hover:text-neutral-100  border border-primary/50 hover:-translate-y-1  hover:bg-primary rounded-lg transition-all duration-500 active:bg-primary/50 active:text-white"
             >
-              <p className="font-medium text-neutral-900">Manage Products</p>
-              <p className="text-sm text-neutral-600 mt-1">Add, edit, or remove geyser models</p>
+              <p className="font-medium text-inherit">Manage Products</p>
+              <p className="text-sm opacity-70 mt-1">Add, edit, or remove geyser models</p>
             </a>
             <a
               href="/admin/bookings"
-              className="block p-4 bg-neutral-50 border border-primary/50 hover:-translate-y-1 hover:bg-primary rounded-lg transition-all duration-500 active:bg-primary/50 active:text-white "
+              className="block p-4 bg-neutral-50 text-neutral-900 hover:text-neutral-100 border border-primary/50 hover:-translate-y-1 hover:bg-primary rounded-lg transition-all duration-500 active:bg-primary/50 active:text-white "
             >
-              <p className="font-medium text-neutral-900">View Bookings</p>
-              <p className="text-sm text-neutral-600 mt-1">Manage installation requests</p>
+              <p className="font-medium text-inherit">View Bookings</p>
+              <p className="text-sm opacity-70 mt-1">Manage installation requests</p>
             </a>
             <a
               href="/admin/cloudinary"
-              className="block p-4 bg-neutral-50 border border-primary/50 hover:-translate-y-1 hover:bg-primary rounded-lg transition-all duration-500 active:bg-primary/50 active:text-white "
+              className="block p-4 bg-neutral-50 text-neutral-900 hover:text-neutral-100 border border-primary/50 hover:-translate-y-1 hover:bg-primary rounded-lg transition-all duration-500 active:bg-primary/50 active:text-white "
             >
-              <p className="font-medium text-neutral-900">Manage Images</p>
-              <p className="text-sm text-neutral-600 mt-1">View and delete Cloudinary images</p>
+              <p className="font-medium text-inherit">Manage Images</p>
+              <p className="text-sm opacity-70 mt-1">View and delete Cloudinary images</p>
             </a>
           </div>
         </Card>
