@@ -160,7 +160,7 @@ export default function AdminLayout({
                   setIsMobileMenuOpen(false) // Close mobile menu on navigation
                 }}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all ${
-                  isActive ? "bg-accent dark:text-white" : "text-neutral-600 hover:bg-neutral-100"
+                  isActive ? "bg-primary text-white dark:text-white" : "text-neutral-600 hover:bg-primary/10"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -190,7 +190,7 @@ export default function AdminLayout({
           <Button
             onClick={handleLogout}
             variant="outline"
-            className="text-red-500 text-center bg-red-200 border-red-400 hover:bg-red-300 hover:text-white w-full"
+            className="text-red-600 text-center bg-red-50 border-red-400 hover:bg-red-600 hover:text-white w-full"
           >
             <LogOut className="w-5 h-5 lg:mr-2" />
             <span className="lg:block hidden">Logout</span>
