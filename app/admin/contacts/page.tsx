@@ -227,6 +227,7 @@ function AdminContactsContent() {
                   <Button
                     variant="outline"
                     size="sm"
+                    className="bg-green-50 text-green-700 border hover:text-white hover:bg-green-700"
                     onClick={() => updateStatus(selectedContact._id!, selectedContact.status === 'unread' ? 'read' : 'unread')}
                   >
                     {selectedContact.status === 'unread' ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
@@ -244,6 +245,7 @@ function AdminContactsContent() {
                     variant="destructive"
                     size="sm"
                     onClick={() => deleteContact(selectedContact._id!)}
+                    className="bg-red-100 text-red-600 border hover:text-white hover:bg-red-600"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
                     Delete

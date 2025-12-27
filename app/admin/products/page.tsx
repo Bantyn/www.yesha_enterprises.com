@@ -280,7 +280,7 @@ function AdminProductsPageContent() {
               </div>
               <div className="flex gap-2">
                 <Button size="sm" onClick={() => handleEdit(p)}><Edit className="w-3 h-3" /> Edit</Button>
-                <Button className="bg-red-200 text-red-500 hover:bg-red-400 hover:text-white" size="sm" variant="destructive" onClick={() => handleDelete(p._id!)}><Trash2 className="w-3 h-3" /> Delete</Button>
+                <Button className="bg-red-50 border text-red-600 hover:bg-red-600 hover:text-white" size="sm" variant="destructive" onClick={() => handleDelete(p._id!)}><Trash2 className="w-3 h-3" /> Delete</Button>
               </div>
             </div>
           </Card>

@@ -221,7 +221,7 @@ function AdminBookingsPageContent() {
                         .catch(error => console.error("Delete error:", error))
                     }
                   }}
-                  className="gap-2"
+                  className="gap-2 bg-red-100 text-red-600 border hover:text-white hover:bg-red-600"
                 >
                   <Trash2 className="w-4 h-4" />
                   Delete

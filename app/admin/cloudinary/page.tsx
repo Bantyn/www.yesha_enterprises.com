@@ -97,7 +97,7 @@ export default function CloudinaryPage() {
                   variant="destructive"
                   size="sm"
                   onClick={() => handleDelete(image.publicId)}
-                  className="w-full bg-red-200 text-red-600 border hover:bg-red-600 hover:text-white "
+                  className="w-full bg-red-100 text-red-600 border hover:bg-red-600 hover:text-white "
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Delete

@@ -385,8 +385,8 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-6">
           <h2 className="text-xl font-semibold text-neutral-900 mb-4">Quick Actions</h2>
-          <div className="flex justify-between items-center py-2 bg-neutral-200 rounded-3xl p-4">
-              <span className="text-neutral-600">Maintenance Mode</span>
+          <div className="flex justify-between items-center py-2 bg-primary/20 rounded-lg p-4 border border-primary hover:bg-primary hover:text-white transition-colors">
+              <span>Maintenance Mode</span>
               <Switch
                 checked={maintenanceMode}
                 onCheckedChange={handleMaintenanceToggle}
