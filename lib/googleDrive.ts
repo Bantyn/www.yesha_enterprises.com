@@ -1,26 +1,31 @@
-import { google } from "googleapis";
-import { Readable } from "stream";
+import { google } from "googleapis"
+import { Readable } from "stream"
 
 const auth = new google.auth.JWT({
   email: process.env.GOOGLE_CLIENT_EMAIL,
   key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
   scopes: ["https://www.googleapis.com/auth/drive"],
-});
+})
 
-const drive = google.drive({ version: "v3", auth });
+const drive = google.drive({ version: "v3", auth })
 
 function bufferToStream(buffer: Buffer) {
-  const stream = new Readable();
-  stream.push(buffer);
-  stream.push(null);
-  return stream;
+  const stream = new Readable()
+  stream.push(buffer)
+  stream.push(null)
+  return stream
 }
 
 export async function uploadToDrive(
   buffer: Buffer,
   fileName: string,
-  folderId: string
+  folderId: string,
+  sharedDriveId: string
 ) {
+  if (!sharedDriveId) {
+    throw new Error("Shared Drive ID is missing")
+  }
+
   const response = await drive.files.create({
     requestBody: {
       name: fileName,
@@ -28,21 +33,22 @@ export async function uploadToDrive(
     },
     media: {
       mimeType: "image/jpeg",
-      body: bufferToStream(buffer), // ✅ FIX HERE
+      body: bufferToStream(buffer),
     },
     fields: "id",
-  });
+    supportsAllDrives: true, 
+  })
 
-  const fileId = response.data.id!;
+  const fileId = response.data.id!
 
-  // Make public
   await drive.permissions.create({
     fileId,
     requestBody: {
       role: "reader",
       type: "anyone",
     },
-  });
+    supportsAllDrives: true,
+  })
 
-  return `https://drive.google.com/uc?id=${fileId}`;
+  return `https://drive.google.com/uc?id=${fileId}`
 }

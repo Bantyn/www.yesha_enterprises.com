@@ -6,17 +6,24 @@ import { Footer } from "@/components/footer"
 import { ArrowRight, Calendar } from "lucide-react"
 import { useBooking, type GeyserModel } from "@/hooks/use-booking"
 import type { Product } from "@/lib/db-schemas"
+import MaintenanceScreen from "@/components/maintenance-screen"
 
 export default function LandingPage() {
   const openBooking = useBooking((state) => state.openBooking)
   const [featuredProducts, setFeaturedProducts] = useState<GeyserModel[]>([])
   const [loading, setLoading] = useState(true)
+  const [maintenanceMode, setMaintenanceMode] = useState(false)
 
   useEffect(() => {
-    async function fetchFeaturedProducts() {
+    async function fetchData() {
       try {
-        const response = await fetch("/api/products")
-        const { products } = await response.json()
+        const [productsRes, settingsRes] = await Promise.all([
+          fetch("/api/products"),
+          fetch("/api/settings"),
+        ])
+
+        const { products } = await productsRes.json()
+        const settings = await settingsRes.json()
 
         // Convert Product[] to GeyserModel[] and take first 3
         const models: GeyserModel[] = products.slice(0, 3).map((p: Product) => ({
@@ -29,15 +36,20 @@ export default function LandingPage() {
         }))
 
         setFeaturedProducts(models)
+        setMaintenanceMode(settings.maintenanceMode || false)
       } catch (error) {
-        console.error("[v0] Error fetching products:", error)
+        console.error("[v0] Error fetching data:", error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchFeaturedProducts()
+    fetchData()
   }, [])
+
+  if (maintenanceMode) {
+    return <MaintenanceScreen />
+  }
 
   return (
     <main className="min-h-screen font-sans bg-background text-foreground">

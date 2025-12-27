@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import {
   Phone,
@@ -8,8 +11,28 @@ import {
   Clock,
   HelpCircle,
 } from "lucide-react"
+import MaintenanceScreen from "@/components/maintenance-screen"
 
 export default function SupportPage() {
+  const [maintenanceMode, setMaintenanceMode] = useState(false)
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await fetch("/api/settings")
+        const data = await res.json()
+        setMaintenanceMode(data.maintenanceMode || false)
+      } catch (error) {
+        console.error("Error fetching settings:", error)
+      }
+    }
+
+    fetchSettings()
+  }, [])
+
+  if (maintenanceMode) {
+    return <MaintenanceScreen />
+  }
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />

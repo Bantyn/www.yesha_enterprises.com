@@ -1,6 +1,10 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Shield, Zap, Wind, Droplets } from "lucide-react"
 import { Footer } from "@/components/footer"
+import MaintenanceScreen from "@/components/maintenance-screen"
 
 const FEATURES = [
   {
@@ -26,7 +30,25 @@ const FEATURES = [
 ]
 
 export default function TechnologyPage() {
-  return (
+  const [maintenanceMode, setMaintenanceMode] = useState(false)
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await fetch("/api/settings")
+        const data = await res.json()
+        setMaintenanceMode(data.maintenanceMode || false)
+      } catch (error) {
+        console.error("Error fetching settings:", error)
+      }
+    }
+
+    fetchSettings()
+  }, [])
+
+  if (maintenanceMode) {
+    return <MaintenanceScreen />
+  }
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
 

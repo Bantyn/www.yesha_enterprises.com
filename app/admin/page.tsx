@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Package, Calendar, TrendingUp, Clock } from "lucide-react"
+import { Package, Calendar, TrendingUp, Clock, Settings } from "lucide-react"
 import { Card } from "@/components/ui/card"
+import { Switch } from "@/components/ui/switch"
 
 interface Stats {
   totalProducts: number
@@ -19,22 +20,25 @@ export default function AdminDashboard() {
     recentBookings: 0,
   })
   const [loading, setLoading] = useState(true)
+  const [maintenanceMode, setMaintenanceMode] = useState(false)
 
   useEffect(() => {
     async function fetchStats() {
       try {
-        const [productsRes, bookingsRes] = await Promise.all([
+        const [productsRes, bookingsRes, settingsRes] = await Promise.all([
           fetch("/api/products"),
           fetch("/api/bookings"),
+          fetch("/api/settings"),
         ])
 
-        if (!productsRes.ok || !bookingsRes.ok) {
-          console.error("Failed to fetch API routes", { productsRes, bookingsRes })
+        if (!productsRes.ok || !bookingsRes.ok || !settingsRes.ok) {
+          console.error("Failed to fetch API routes", { productsRes, bookingsRes, settingsRes })
           return
         }
 
         const productsData = await productsRes.json()
         const bookingsData = await bookingsRes.json()
+        const settingsData = await settingsRes.json()
 
         const products = productsData.products || []
         const bookings = bookingsData.bookings || []
@@ -48,6 +52,8 @@ export default function AdminDashboard() {
           pendingBookings: bookings.filter((b: any) => b.status === "pending").length,
           recentBookings: bookings.filter((b: any) => new Date(b.createdAt) > weekAgo).length,
         })
+
+        setMaintenanceMode(settingsData.maintenanceMode || false)
       } catch (error) {
         console.error("[v0] Error fetching stats:", error)
       } finally {
@@ -59,6 +65,31 @@ export default function AdminDashboard() {
     fetchStats()
   }, [])
 
+  const handleMaintenanceToggle = async (checked: boolean) => {
+    const confirmMessage = checked
+      ? "Are you sure you want to enable maintenance mode? This will make the website unavailable to users."
+      : "Are you sure you want to disable maintenance mode? The website will be accessible again."
+
+    if (!confirm(confirmMessage)) return
+
+    try {
+      const res = await fetch("/api/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ maintenanceMode: checked }),
+      })
+
+      if (res.ok) {
+        setMaintenanceMode(checked)
+        alert(checked ? "Maintenance mode enabled." : "Maintenance mode disabled.")
+      } else {
+        alert("Failed to update maintenance mode.")
+      }
+    } catch (error) {
+      console.error("Error updating maintenance mode:", error)
+      alert("Error updating maintenance mode.")
+    }
+  }
   const statCards = [
     {
       icon: Package,
@@ -156,9 +187,17 @@ export default function AdminDashboard() {
               <span className="text-neutral-600">Last Updated</span>
               <span className="font-medium text-neutral-900">{new Date().toLocaleDateString()}</span>
             </div>
-            <div className="flex justify-between py-2">
+            <div className="flex justify-between py-2 border-b border-neutral-100">
               <span className="text-neutral-600">Version</span>
               <span className="font-medium text-neutral-900">1.0.0</span>
+            </div>
+            <div className="flex justify-between items-center py-2 bg-neutral-200 rounded-3xl p-4">
+              <span className="text-neutral-600">Maintenance Mode</span>
+              <Switch
+                checked={maintenanceMode}
+                onCheckedChange={handleMaintenanceToggle}
+                className="data-[state=checked]:bg-red-500"
+              />
             </div>
           </div>
         </Card>

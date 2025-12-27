@@ -5,17 +5,32 @@ import { Analytics } from "@vercel/analytics/next"
 import { BookingModal } from "@/components/booking-modal"
 import "./globals.css"
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
-const _geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
+/* -------------------------------------------
+   Fonts
+------------------------------------------- */
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+})
+
 const instrumentSerif = Instrument_Serif({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-serif",
 })
 
+/* -------------------------------------------
+   Metadata
+------------------------------------------- */
 export const metadata: Metadata = {
   title: "Yesha Enterprises | Premium Gas Water Geysers",
-  description: "Experience the next generation of home heating with AquaFlow's high-efficiency gas geysers.",
+  description:
+    "Experience the next generation of home heating with AquaFlow's high-efficiency gas geysers.",
   generator: "v0.app",
   icons: {
     icon: [
@@ -27,16 +42,25 @@ export const metadata: Metadata = {
   },
 }
 
+/* -------------------------------------------
+   Root Layout
+------------------------------------------- */
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className={`${geist.variable} ${instrumentSerif.variable}`}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
+      >
         {children}
+
+        {/* Global Modals */}
         <BookingModal />
+
+        {/* Analytics */}
         <Analytics />
       </body>
     </html>
