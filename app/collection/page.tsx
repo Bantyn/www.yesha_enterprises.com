@@ -2,15 +2,19 @@
 
 import { useEffect, useState } from "react"
 import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 import type { Product } from "@/lib/db-schemas"
 import { PRODUCT_CATEGORIES } from "@/lib/db-schemas"
-import { Footer } from "@/components/footer"
 import { motion, AnimatePresence } from "framer-motion"
+import { Calendar } from "lucide-react"
+import { useBooking, type GeyserModel } from "@/hooks/use-booking"
 
 export default function CollectionPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [loading, setLoading] = useState(true)
+
+  const openBooking = useBooking((state) => state.openBooking)
 
   useEffect(() => {
     async function fetchProducts() {
@@ -34,6 +38,15 @@ export default function CollectionPage() {
     fetchProducts()
   }, [selectedCategory])
 
+  const toGeyserModel = (product: Product): GeyserModel => ({
+    id: product._id || "",
+    name: product.name,
+    series: product.category,
+    capacity: product.capacity,
+    image: product.image,
+    price: `₹${product.price.toLocaleString()}`,
+  })
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
@@ -52,8 +65,8 @@ export default function CollectionPage() {
         </p>
       </section>
 
-      {/* Category Filter */}
-      <section className="px-6 max-w-7xl mx-auto ">
+      {/* Category Filter (UNCHANGED) */}
+      <section className="px-6 max-w-7xl mx-auto">
         <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-secondary/40 backdrop-blur border border-border">
           {["all", ...PRODUCT_CATEGORIES].map((cat) => {
             const active = selectedCategory === cat
@@ -93,50 +106,87 @@ export default function CollectionPage() {
               layout
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10"
             >
-              {products.map((product, idx) => (
-                <motion.div
-                  key={product._id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ delay: idx * 0.06 }}
-                  className="group relative rounded-3xl bg-secondary/40 backdrop-blur border border-border overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
-                >
-                  {/* Image */}
-                  <div className="aspect-square p-8 flex items-center justify-center bg-gradient-to-br from-background/40 to-background">
-                    <img
-                      src={product.image || "/placeholder.svg"}
-                      alt={product.name}
-                      className="object-contain w-full h-full transition-transform duration-700 group-hover:scale-110"
-                    />
-                  </div>
+              {products.map((product, idx) => {
+                const model = toGeyserModel(product)
 
-                  {/* Content */}
-                  <div className="p-6">
-                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
-                      {product.category}
-                    </p>
+                return (
+                  <motion.div
+                    key={product._id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ delay: idx * 0.06, ease: "easeOut" }}
+                    className="
+    group relative rounded-3xl
+    bg-secondary/40 backdrop-blur
+    border border-neutral-200/50 shadow-lg
+    overflow-hidden
+    transition-shadow duration-500
+    will-change-transform
+    
+  "
+                  >
+                    {/* Image Wrapper (FIXED HEIGHT) */}
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-background/40 to-background">
+                      <img
+                        src={product.image || "/placeholder.svg"}
+                        alt={product.name}
+                        className="
+        object-contain w-full h-full
+        transition-transform duration-700 ease-out
+        group-hover:scale-110
+      "
+                      />
 
-                    <h3 className="text-lg font-semibold mb-3 leading-snug">
-                      {product.name}
-                    </h3>
+                      {/* Dark overlay for focus */}
+                      <div className="
+      absolute inset-0
+      bg-black/0
+      group-hover:bg-black/10
+      transition-colors duration-500
+    " />
 
-                    <div className="flex items-center justify-between text-sm mb-4">
-                      <span className="font-light">
-                        {product.capacity}
-                      </span>
-                      <span className="text-primary font-semibold">
-                        ₹{product.price.toLocaleString()}
-                      </span>
+                      {/* Booking Button (NO LAYOUT SHIFT) */}
+                      <button
+                        onClick={() => openBooking(model)}
+                        className="
+        absolute bottom-0 left-0 w-full
+        translate-y-full group-hover:translate-y-0
+        bg-primary text-primary-foreground
+        py-4
+        flex items-center justify-center gap-2
+        uppercase tracking-widest text-[10px] font-semibold
+        transition-transform duration-500 ease-out
+      "
+                      >
+                        <Calendar className="w-4 h-4" />
+                        Book Installation
+                      </button>
                     </div>
-                  </div>
 
-                  {/* Glow */}
-                  <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition">
-                    <div className="absolute -inset-px rounded-3xl bg-gradient-to-tr from-primary/20 to-transparent" />
-                  </div>
-                </motion.div>
-              ))}
+                    {/* Content (FIXED PADDING AREA) */}
+                    <div className="p-6 space-y-3">
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                        {product.category}
+                      </p>
+
+                      <h3 className="text-lg font-semibold leading-snug line-clamp-2">
+                        {product.name}
+                      </h3>
+
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-light">{product.capacity}</span>
+                        <span className="text-primary font-semibold">
+                          ₹{product.price.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+
+                   
+                  </motion.div>
+
+                )
+              })}
             </motion.div>
           </AnimatePresence>
         )}

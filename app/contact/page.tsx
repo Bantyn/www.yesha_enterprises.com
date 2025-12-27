@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare, CheckCircle, Star, Users, Award, Zap } from "lucide-react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { motion } from "framer-motion"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -113,40 +114,73 @@ export default function ContactPage() {
         <Navbar></Navbar>
 
       {/* Hero Section */}
-      <section className="px-6 pt-28 pb-16 max-w-5xl mx-auto text-center">
-        <span className="text-[11px] uppercase tracking-widest text-primary block mb-4">
+      <motion.section
+        className="px-6 pt-28 pb-16 max-w-5xl mx-auto text-center"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
+        <motion.span
+          className="text-[11px] uppercase tracking-widest text-primary block mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true }}
+        >
           Get In Touch
-        </span>
-        <h1 className="text-5xl md:text-6xl mb-6">
+        </motion.span>
+        <motion.h1
+          className="text-5xl md:text-6xl mb-6"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
           We're Here to Help
-        </h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-8">
+        </motion.h1>
+        <motion.p
+          className="text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          viewport={{ once: true }}
+        >
           Have questions about our AquaFlow water purification systems? Need technical support,
           installation assistance, or just want to learn more? Our expert team is ready to help
           you with personalized solutions.
-        </p>
+        </motion.p>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary mb-1">24hrs</div>
-            <div className="text-xs text-muted-foreground">Average Response</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary mb-1">5000+</div>
-            <div className="text-xs text-muted-foreground">Happy Customers</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary mb-1">15+</div>
-            <div className="text-xs text-muted-foreground">Years Experience</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary mb-1">4.9★</div>
-            <div className="text-xs text-muted-foreground">Customer Rating</div>
-          </div>
-        </div>
-      </section>
+        <motion.div
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+        >
+          {[
+            { value: "24hrs", label: "Average Response" },
+            { value: "5000+", label: "Happy Customers" },
+            { value: "15+", label: "Years Experience" },
+            { value: "4.9★", label: "Customer Rating" }
+          ].map((stat, i) => (
+            <motion.div
+              key={i}
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <div className="text-2xl font-bold text-primary mb-1">{stat.value}</div>
+              <div className="text-xs text-muted-foreground">{stat.label}</div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.section>
          {/* Main Contact Section */}
+
       <section className="px-6 pb-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

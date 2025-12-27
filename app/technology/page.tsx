@@ -5,6 +5,7 @@ import { Navbar } from "@/components/navbar"
 import { Shield, Zap, Wind, Droplets } from "lucide-react"
 import { Footer } from "@/components/footer"
 import MaintenanceScreen from "@/components/maintenance-screen"
+import { motion } from "framer-motion"
 
 const FEATURES = [
   {
@@ -34,30 +35,60 @@ export default function TechnologyPage() {
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
 
-      <section className="relative px-6 py-24 max-w-6xl mx-auto">
+      <motion.section
+        className="relative px-6 py-24 max-w-6xl mx-auto"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
         {/* Header */}
-        <div className="mb-20">
-          <span className="inline-block mb-4 text-[11px] uppercase tracking-[0.3em] text-primary">
+        <motion.div
+          className="mb-20"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <motion.span
+            className="inline-block mb-4 text-[11px] uppercase tracking-[0.3em] text-primary"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
             Innovation
-          </span>
+          </motion.span>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold leading-tight">
+          <motion.h1
+            className="text-4xl md:text-6xl lg:text-7xl font-semibold leading-tight"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
             Precision <br className="hidden sm:block" />
             Engineering
-          </h1>
+          </motion.h1>
 
-          <p className="mt-6 max-w-xl text-muted-foreground font-light leading-relaxed">
+          <motion.p
+            className="mt-6 max-w-xl text-muted-foreground font-light leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            viewport={{ once: true }}
+          >
             Crafted with advanced thermal intelligence and modern safety architecture
             to deliver unmatched performance in every environment.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* Feature Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {FEATURES.map((item, i) => {
             const Icon = item.icon
             return (
-              <div
+              <motion.div
                 key={i}
                 className="
                   group relative rounded-2xl border border-border
@@ -67,6 +98,11 @@ export default function TechnologyPage() {
                   transition-all duration-300
                   hover:shadow-xl hover:-translate-y-1
                 "
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: i * 0.2 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
               >
                 {/* Glow effect */}
                 <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition pointer-events-none bg-gradient-to-br from-primary/10 via-transparent to-transparent" />
@@ -85,11 +121,11 @@ export default function TechnologyPage() {
                     {item.desc}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             )
           })}
         </div>
-      </section>
+      </motion.section>
       <Footer></Footer>
     </main>
 
