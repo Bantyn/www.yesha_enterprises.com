@@ -146,7 +146,7 @@ export default function LandingPage() {
 
       {/* Stats Section */}
       <motion.section
-        className="py-24 px-30 overflow-hidden"
+        className="py-24 px-6 md:px-30 overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -161,7 +161,7 @@ export default function LandingPage() {
           ].map((stat, i) => (
             <motion.div
               key={i}
-              className=" backdrop-blur-md p-8 md:p-12 rounded-4xl border border-neutral-500/30 hover:translate-y-1 hover:shadow-lg transition-all group"
+              className="backdrop-blur-md p-8 md:p-12  rounded-2xl md:rounded-4xl border border-neutral-500/30 hover:translate-y-1 hover:shadow-lg transition-all group"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
@@ -220,7 +220,7 @@ export default function LandingPage() {
                   />
                   <button
                     onClick={() => openBooking(model)}
-                    className="absolute bottom-0 left-0 w-full bg-primary text-primary-foreground py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] font-bold rounded-b-lg"
+                    className="absolute bottom-0 left-0 w-full bg-primary text-primary-foreground py-4 md:translate-y-full md:group-hover:translate-y-0 transition-transform duration-500 flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] font-bold rounded-b-lg"
                   >
                     <Calendar className="w-4 h-4" />
                     Book Appointment
@@ -238,44 +238,105 @@ export default function LandingPage() {
         )}
       </motion.section>
 
-      {/* CTA Section */}
-      <motion.section
-        className="px-6 py-32 text-center"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
+      {/* Hero / CTA Section */}
+<motion.section
+  className="relative px-6 py-24 md:py-36"
+  initial={{ opacity: 0 }}
+  whileInView={{ opacity: 1 }}
+  transition={{ duration: 0.8 }}
+  viewport={{ once: true }}
+>
+  {/* Background Glow */}
+  <div className="absolute inset-0 -z-10">
+    <div className="absolute top-1/2 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[120px]" />
+  </div>
+
+  <motion.div
+    className="mx-auto max-w-6xl rounded-3xl bg-card/30 backdrop-blur-xl border border-border p-8 sm:p-12 md:p-16 text-center"
+    initial={{ opacity: 0, y: 60 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.9, ease: "easeOut" }}
+    viewport={{ once: true }}
+  >
+    {/* Badge */}
+    <motion.span
+      className="inline-block mb-6 rounded-full border border-border bg-background/60 px-4 py-2 text-xs uppercase tracking-widest text-muted-foreground"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+      viewport={{ once: true }}
+    >
+      Trusted Water Solutions
+    </motion.span>
+
+    {/* Heading */}
+    <motion.h2
+      className="mx-auto max-w-4xl text-balance text-3xl sm:text-4xl md:text-6xl font-semibold leading-tight"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.35, duration: 0.7 }}
+      viewport={{ once: true }}
+    >
+      Elevate your home with{" "}
+      <span className="bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
+        AquaFlow expertise
+      </span>
+    </motion.h2>
+
+    {/* Subheading */}
+    <motion.p
+      className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.5 }}
+      viewport={{ once: true }}
+    >
+      Professional water heater installation, maintenance, and support —
+      engineered for efficiency, safety, and long-term comfort.
+    </motion.p>
+
+    {/* Trust Points */}
+    <motion.div
+      className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-muted-foreground"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ delay: 0.65 }}
+      viewport={{ once: true }}
+    >
+      <span>✔ Quick Installation</span>
+      <span>✔ Affordable Pricing</span>
+      <span>✔ After-Sales Support</span>
+    </motion.div>
+
+    {/* CTA Buttons */}
+    <motion.div
+      className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.8 }}
+      viewport={{ once: true }}
+    >
+      <motion.button
+         onClick={() => openBooking()}
+        className="inline-flex items-center justify-center rounded-xl bg-primary px-8 py-4 text-sm font-medium uppercase tracking-widest text-primary-foreground shadow-lg hover:bg-primary/90"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
-        <motion.div
-          className="bg-card/30 backdrop-blur-md  p-12"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <motion.h2
-            className="text-4xl md:text-6xl mb-8 text-balance max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
-            Elevate your home with AquaFlow expertise
-          </motion.h2>
-          <motion.button
-            onClick={() => openBooking()}
-            className="bg-primary text-primary-foreground px-22 py-5 mb-30 rounded-lg uppercase tracking-widest text-sm font-medium hover:bg-primary/90 hover:scale-105 transition-all"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            viewport={{ once: true }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Schedule Installation
-          </motion.button>
-        </motion.div>
-      </motion.section>
+        Schedule Installation
+      </motion.button>
+
+      <motion.a
+        href="/collection "
+        className="inline-flex items-center justify-center rounded-xl border border-border bg-background/60 px-8 py-4 text-sm font-medium uppercase tracking-widest text-foreground hover:bg-background"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        View Collections
+      </motion.a>
+    </motion.div>
+  </motion.div>
+</motion.section>
+
 
       {/* Footer */}
       <Footer />

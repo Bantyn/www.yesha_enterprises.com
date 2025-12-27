@@ -151,7 +151,7 @@ export default function CollectionPage() {
                         onClick={() => openBooking(model)}
                         className="
         absolute bottom-0 left-0 w-full
-        translate-y-full group-hover:translate-y-0
+        md:translate-y-full group-hover:translate-y-0
         bg-primary text-primary-foreground
         py-4
         flex items-center justify-center gap-2
