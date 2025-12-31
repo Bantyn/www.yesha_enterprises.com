@@ -164,7 +164,6 @@ export default function AdminDashboard() {
 
       if (res.ok) {
         setMaintenanceMode(checked)
-        alert(checked ? "Maintenance mode enabled." : "Maintenance mode disabled.")
       } else {
         alert("Failed to update maintenance mode.")
       }
