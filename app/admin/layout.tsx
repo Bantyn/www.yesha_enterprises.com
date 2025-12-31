@@ -100,7 +100,6 @@ export default function AdminLayout({
     },
   ]
 
-  /* ✅ LOGIN PAGE → RENDER ONLY CHILDREN */
   if (isLoginPage) {
     return <>{children}</>
   }
@@ -117,7 +116,8 @@ export default function AdminLayout({
 
       {/* SIDEBAR */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-neutral-200 flex flex-col transition-transform duration-300
+        className={`fixed bg-white/20 lg:static inset-y-0 left-0 z-50  md:ml-0 my-10 md:my-0 w-64 rounded-br-4xl rounded-tr-4xl
+        flex flex-col items-center md:items-stretch backdrop-blur-xs shadow-2xl transition-transform duration-300
         ${
           isMobileMenuOpen
             ? "translate-x-0"
@@ -125,7 +125,7 @@ export default function AdminLayout({
         }`}
       >
         {/* Desktop Header */}
-        <div className="hidden lg:block p-6 border-b">
+        <div className="hidden lg:block p-6 border-b border-neutral-200">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-xl font-bold">YESHA ENTERPRISES</h1>
@@ -170,7 +170,7 @@ export default function AdminLayout({
         </div>
 
         {/* NAV */}
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-4 space-y-2 flex flex-col justify-center md:justify-start ">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href
@@ -182,19 +182,19 @@ export default function AdminLayout({
                   router.push(item.href)
                   setIsMobileMenuOpen(false)
                 }}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition
+                className={`md:w-full flex items-center justify-center md:justify-between md:px-4 md:py-3  md:h-auto h-30 w-30 md:rounded-lg rounded-3xl transition-all duration-300
                 ${
                   isActive
                     ? "bg-primary text-white"
-                    : "text-neutral-600 hover:bg-primary/10"
+                    : "text-neutral-600 hover:bg-primary/20 md:bg-primary/5 bg-white/20 hover:text-white md:hover:text-primary active:bg-white active:text-primary shadow-sm  "
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
+                  <Icon className="md:w-5 md:h-5" />
+                  <span className="hidden md:inline font-medium">{item.label}</span>
                 </div>
                 {item.badge && (
-                  <Badge variant="destructive" className="h-5">
+                  <Badge variant="destructive" className="hidden md:inline bg-primary">
                     {item.badge}
                   </Badge>
                 )}
@@ -204,7 +204,7 @@ export default function AdminLayout({
         </nav>
 
         {/* LOGOUT */}
-        <div className="p-4 border-t">
+        <div className="p-4 border-t border-neutral-200">
           <Button
             onClick={handleLogout}
             variant="outline"
@@ -219,7 +219,7 @@ export default function AdminLayout({
       {/* MAIN */}
       <main className="flex-1 flex flex-col">
         {/* Mobile Header */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b bg-white">
+        <div className="lg:hidden  flex items-center justify-between p-4 border-b border-neutral-200 bg-white">
           <Button
             variant="ghost"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
