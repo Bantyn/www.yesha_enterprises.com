@@ -181,26 +181,35 @@ function AdminBookingsPageContent() {
                 </Select>
 
                 <a
-                  href={`https://wa.me/91${booking.phone ? booking.phone.replace(/\D/g, "") : ""}?text=${encodeURIComponent(
-                    `📌 *YESHA ENTERPRISES Installation Request*
+  href={`https://wa.me/91${booking.phone ? booking.phone.replace(/\D/g, "") : ""}?text=${encodeURIComponent(
+`*YESHA ENTERPRISES – Installation Request*
 
-                      🛠️ *Model:* ${booking.model || "General Inquiry"}
-                      📝 *Series:* ${booking.series || "-"}
-                      📏 *Capacity:* ${booking.capacity || "-"}
+*Dear ${booking.name}*,
+     Thank you for contacting YESHA ENTERPRISES. We have received your installation request with the following details:
 
-                      👤 *Customer Name:* ${booking.name}
-                      📞 *Phone:* ${booking.phone}
-                      ✉️ *Email:* ${booking.email}
+• Product Model : *${booking.model || "General Inquiry"}*
 
-                      📅 *Preferred Installation Date:* ${booking.date}
-                      🏠 *Installation Address:* ${booking.address}
+Customer Information:
+• Name : *${booking.name}*
+• Phone : *${booking.phone}*
+• Email : *${booking.email}*
 
-                      ────────────────────
-                      ✅ Please confirm the appointment.`
-                                        )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+Installation Details :
+• Preferred Date : ${booking.date}
+• Installation Address : *${booking.address}*
+
+Our technical team will review your request and confirm the appointment shortly.
+
+If you have any questions or need to make changes, please feel free to reply to this message.
+
+Best regards,
+*YESHA ENTERPRISES*
+Customer Support Team`
+  )}`}
+  target="_blank"
+  rel="noopener noreferrer"
+>
+
                   <Button
                     variant="outline"
                     size="sm"
