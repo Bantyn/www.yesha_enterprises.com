@@ -82,7 +82,7 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              Transform your morning rituals with AquaFlow's high-efficiency gas geysers. Precision engineering for the
+              Transform your morning rituals with Yesha Enterprises's high-efficiency gas geysers. Precision engineering for the
               modern home.
             </motion.p>
           </div>
@@ -279,7 +279,7 @@ export default function LandingPage() {
     >
       Elevate your home with{" "}
       <span className="bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
-        AquaFlow expertise
+        Yesha Enterprises expertise
       </span>
     </motion.h2>
 

@@ -25,33 +25,33 @@ export default function ContactPage() {
   const suggestedMessages = [
     {
       title: "Product Inquiry",
-      subject: "Inquiry about AquaFlow Products",
-      message: "Hi, I'm interested in learning more about your AquaFlow water purification systems. Could you please provide information about your product range, pricing, and which model would be best suited for a family of 4?"
+      subject: "Inquiry about Yesha Enterprises Products",
+      message: "Hi, I'm interested in learning more about your Yesha Enterprises water purification systems. Could you please provide information about your product range, pricing, and which model would be best suited for a family of 4?"
     },
     {
       title: "Installation Service",
       subject: "Request for Installation Service",
-      message: "Hello, I recently purchased an AquaFlow system and would like to schedule a professional installation. Please let me know the process, requirements, and available time slots for installation at my location."
+      message: "Hello, I recently purchased an Yesha Enterprises system and would like to schedule a professional installation. Please let me know the process, requirements, and available time slots for installation at my location."
     },
     {
       title: "Technical Support",
       subject: "Technical Support Request",
-      message: "Hi, I'm experiencing some issues with my AquaFlow system. The water flow seems reduced and I'm seeing some error indicators. Could you please help me troubleshoot this issue or arrange for a technician visit?"
+      message: "Hi, I'm experiencing some issues with my Yesha Enterprises system. The water flow seems reduced and I'm seeing some error indicators. Could you please help me troubleshoot this issue or arrange for a technician visit?"
     },
     {
       title: "Warranty Claim",
       subject: "Warranty Service Request",
-      message: "Hello, I need assistance with a warranty claim for my AquaFlow product. The system is within warranty period but has developed a fault. Please guide me through the warranty claim process and next steps."
+      message: "Hello, I need assistance with a warranty claim for my Yesha Enterprises product. The system is within warranty period but has developed a fault. Please guide me through the warranty claim process and next steps."
     },
     {
       title: "Maintenance Service",
       subject: "Annual Maintenance Booking",
-      message: "Hi, it's been a year since I purchased my AquaFlow system. I'd like to schedule the annual maintenance service as recommended. Please provide information about the maintenance package and available dates."
+      message: "Hi, it's been a year since I purchased my Yesha Enterprises system. I'd like to schedule the annual maintenance service as recommended. Please provide information about the maintenance package and available dates."
     },
     {
       title: "Bulk Purchase",
       subject: "Bulk Purchase Inquiry",
-      message: "Hello, I'm interested in bulk purchasing AquaFlow systems for my organization/residential complex. Could you please provide pricing for bulk orders, any discounts available, and delivery arrangements?"
+      message: "Hello, I'm interested in bulk purchasing Yesha Enterprises systems for my organization/residential complex. Could you please provide pricing for bulk orders, any discounts available, and delivery arrangements?"
     }
   ]
 
@@ -146,7 +146,7 @@ export default function ContactPage() {
           transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}
         >
-          Have questions about our AquaFlow water purification systems? Need technical support,
+          Have questions about our Yesha Enterprises water purification systems? Need technical support,
           installation assistance, or just want to learn more? Our expert team is ready to help
           you with personalized solutions.
         </motion.p>

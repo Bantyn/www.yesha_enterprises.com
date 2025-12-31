@@ -46,12 +46,12 @@ export default function SupportPage() {
 
   const faqs = [
     {
-      question: "How do I install my AquaFlow water purifier?",
+      question: "How do I install my Yesha Enterprises water purifier?",
       answer: "Installation is simple and should be done by our certified technicians. We provide step-by-step guidance and ensure proper setup. Contact our support team to schedule a professional installation within 24 hours of purchase."
     },
     {
-      question: "What is the warranty period for AquaFlow products?",
-      answer: "All AquaFlow products come with a comprehensive 1-year manufacturer warranty covering manufacturing defects. Extended warranty options are available for up to 5 years with our premium service plans."
+      question: "What is the warranty period for Yesha Enterprises products?",
+      answer: "All Yesha Enterprises products come with a comprehensive 1-year manufacturer warranty covering manufacturing defects. Extended warranty options are available for up to 5 years with our premium service plans."
     },
     {
       question: "How often should I service my water purifier?",
@@ -70,8 +70,8 @@ export default function SupportPage() {
       answer: "All user manuals, installation guides, and documentation are available in the 'User Manuals' section above. You can also request physical copies or email delivery of any specific documentation."
     },
     {
-      question: "What types of water contaminants does AquaFlow remove?",
-      answer: "AquaFlow systems effectively remove bacteria, viruses, heavy metals, pesticides, chlorine, and other harmful contaminants. Each model is designed for specific water quality challenges in different regions."
+      question: "What types of water contaminants does Yesha Enterprises remove?",
+      answer: "Yesha Enterprises systems effectively remove bacteria, viruses, heavy metals, pesticides, chlorine, and other harmful contaminants. Each model is designed for specific water quality challenges in different regions."
     },
     {
       question: "Can I install the purifier myself to save costs?",
@@ -120,7 +120,7 @@ export default function SupportPage() {
           viewport={{ once: true }}
         >
           From installation guidance to technical troubleshooting, our support
-          team is here to ensure your AquaFlow experience is flawless. Get expert
+          team is here to ensure your Yesha Enterprises experience is flawless. Get expert
           assistance from certified technicians and access comprehensive resources.
         </motion.p>
 
@@ -267,7 +267,7 @@ export default function SupportPage() {
           <h2 className="text-3xl mb-4">Our Service Process</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             We follow a systematic approach to ensure your complete satisfaction
-            and the optimal performance of your AquaFlow system.
+            and the optimal performance of your Yesha Enterprises system.
           </p>
         </motion.div>
 
@@ -313,7 +313,7 @@ export default function SupportPage() {
         >
           <h2 className="text-3xl mb-4">Frequently Asked Questions</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Find quick answers to common questions about AquaFlow products and services.
+            Find quick answers to common questions about Yesha Enterprises products and services.
           </p>
         </motion.div>
 
