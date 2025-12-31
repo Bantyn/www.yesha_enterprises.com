@@ -134,8 +134,8 @@ export default function SupportPage() {
         >
           {[
             { value: "24hrs", label: "Response Time" },
-            { value: "5★", label: "Customer Rating" },
-            { value: "5000+", label: "Installations" },
+            { value: "4.5★", label: "Customer Rating" },
+            { value: "1000+", label: "Installations" },
             { value: "15+", label: "Years Experience" }
           ].map((stat, i) => (
             <motion.div
