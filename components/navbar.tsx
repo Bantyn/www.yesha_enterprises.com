@@ -11,8 +11,8 @@ export function Navbar() {
 
   return (
     <nav className="flex items-center justify-between px-6 py-8 md:px-12 border-b border-border  backdrop-blur-sm bg-neutral-200/30 sticky top-0 z-40">
-      <Link href="/" className="text-xl font-bold tracking-tighter font-sans uppercase">
-        YESHA</br>ENTERPRISES
+      <Link href="/" className="text-xl flex flex-col md:flex-row font-bold tracking-tighter font-sans uppercase">
+        <div>YESHA</div><div>ENTERPRISES</div>
       </Link>
 
       <div className="hidden md:flex gap-12 items-center text-[15px] uppercase tracking-widest text-muted-foreground">
