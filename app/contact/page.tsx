@@ -161,9 +161,9 @@ export default function ContactPage() {
         >
           {[
             { value: "24hrs", label: "Average Response" },
-            { value: "5000+", label: "Happy Customers" },
+            { value: "1000+", label: "Happy Customers" },
             { value: "15+", label: "Years Experience" },
-            { value: "4.9★", label: "Customer Rating" }
+            { value: "4.5★", label: "Customer Rating" }
           ].map((stat, i) => (
             <motion.div
               key={i}
