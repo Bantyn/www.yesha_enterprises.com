@@ -30,6 +30,7 @@ export interface Product {
   model: string        
   category: string
   capacity: string
+  features: string
   price: number
   image?: string
   description?: string
@@ -51,9 +52,13 @@ export interface BookingRequest {
 }
 // lib/db-schemas.ts
 
+/* =======================
+   DEPRECATED: Use /api/categories instead for dynamic categories
+======================= */
 export const PRODUCT_CATEGORIES = [
   "Gas Geyser",
-  "Pressure Pump",
-  "Iron",
   "Storage Tank Geyser",
+  "Pressure Pump",
+  "Parts",
+  "Iron",
 ];

@@ -52,6 +52,7 @@ export async function POST(req: Request) {
     const model = String(formData.get("model") || "")
     const category = String(formData.get("category") || "")
     const capacity = String(formData.get("capacity") || "")
+    const features = String(formData.get("features") || "")
     const price = Number(formData.get("price") || 0)
 
     let image = ""
@@ -73,6 +74,7 @@ export async function POST(req: Request) {
       model,
       category,
       capacity,
+      features,
       price,
       image,
       imagePublicId,
@@ -109,7 +111,7 @@ export async function PUT(req: Request) {
     if (!existing) return NextResponse.json({ success: false, error: "Product not found" }, { status: 404 })
 
     const updateData: Record<string, any> = {}
-    for (const field of ["name", "model", "category", "capacity", "price"]) {
+    for (const field of ["name", "model", "category", "capacity", "features", "price"]) {
       const value = formData.get(field)
       if (value !== null) updateData[field] = field === "price" ? Number(value) : String(value)
     }

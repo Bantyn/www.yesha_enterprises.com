@@ -32,6 +32,7 @@ export default function LandingPage() {
           name: p.name,
           series: p.category,
           capacity: p.capacity,
+          features: p.features,
           image: p.image,
           price: `₹${p.price.toLocaleString()}`,
         }))
@@ -229,9 +230,10 @@ export default function LandingPage() {
                 <span className="text-[11px] uppercase tracking-widest text-muted-foreground">{model.series}</span>
                 <div className="flex justify-between items-center mt-2">
                   <h3 className="text-2xl">{model.name}</h3>
-                  <span className="text-sm font-light text-muted-foreground">{model.capacity}</span>
-                  <h3 className="text-sm font-light text-muted-foreground">{model.price}</h3>
+                  <span className="text-sm font-light text-muted-foreground mx-3">{model.capacity}</span>
+                  <h3 className="text-sm font-light text-primary">{model.price}</h3>
                 </div>
+                  <h3 className="text-sm font-light mt-2">{model.features? "Best Features : " + model.features : ""}</h3>
               </motion.div>
             ))}
           </div>

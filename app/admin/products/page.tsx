@@ -16,7 +16,11 @@ import {
 } from "@/components/ui/select"
 import { Plus, Edit, Trash2, X } from "lucide-react"
 import type { Product } from "@/lib/db-schemas"
-import { PRODUCT_CATEGORIES } from "@/lib/db-schemas"
+
+interface Category {
+  _id: string
+  name: string
+}
 
 // Helper function to highlight matching text
 const highlightText = (text: string, query: string) => {
@@ -30,6 +34,7 @@ const highlightText = (text: string, query: string) => {
 
 function AdminProductsPageContent() {
   const [products, setProducts] = useState<Product[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -42,6 +47,7 @@ function AdminProductsPageContent() {
     category: string
     capacity: string
     price: number
+    features: string
     image: string
     file?: File | null
   }>({
@@ -49,13 +55,14 @@ function AdminProductsPageContent() {
     model: "",
     category: "",
     capacity: "",
+    features: "",
     price: 0,
     image: "",
     file: null,
   })
 
   /* ----------------------------------
-     Fetch Products
+     Fetch Products & Categories
   ---------------------------------- */
   const fetchProducts = async () => {
     try {
@@ -64,6 +71,16 @@ function AdminProductsPageContent() {
       setProducts(data.products || [])
     } catch (err) {
       console.error(err)
+    }
+  }
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/categories")
+      const data = await res.json()
+      setCategories(data.categories || [])
+    } catch (err) {
+      console.error("Failed to fetch categories:", err)
     } finally {
       setLoading(false)
     }
@@ -71,6 +88,7 @@ function AdminProductsPageContent() {
 
   useEffect(() => {
     fetchProducts()
+    fetchCategories()
   }, [])
 
   useEffect(() => {
@@ -91,6 +109,7 @@ function AdminProductsPageContent() {
     formPayload.append("model", formData.model)
     formPayload.append("category", formData.category)
     formPayload.append("capacity", formData.capacity)
+    formPayload.append("features", formData.features)
     formPayload.append("price", String(formData.price))
     if (formData.file) {
       formPayload.append("image", formData.file)
@@ -119,6 +138,7 @@ function AdminProductsPageContent() {
         model: "",
         category: "",
         capacity: "",
+        features: "",
         price: 0,
         image: "",
         file: null,
@@ -139,6 +159,7 @@ function AdminProductsPageContent() {
       model: product.model,
       category: product.category,
       capacity: product.capacity,
+      features: product.features,
       price: product.price,
 
       image: product.image,
@@ -214,21 +235,22 @@ function AdminProductsPageContent() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <InputField label="Name" value={formData.name} onChange={(v: string) => setFormData({ ...formData, name: v })} />
             <InputField label="Model" value={formData.model} onChange={(v: string) => setFormData({ ...formData, model: v })} />
+            <InputField label="Features" value={formData.features} onChange={(v: string) => setFormData({ ...formData, features: v })} />
 
             <div>
               <Label>Category</Label>
               <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {PRODUCT_CATEGORIES.map((c) => (
-                    <SelectItem key={c} value={c}>{c}</SelectItem>
+                  {categories.map((c) => (
+                    <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
             <InputField label="Capacity" value={formData.capacity} onChange={(v:string) => setFormData({ ...formData, capacity: v })} />
-            <InputField label="Price" type="number" value={formData.price} onChange={(v: string) => setFormData({ ...formData, price: Number(v) })} />
+            <InputField label="Price" type="text" onChange={(v: string) => setFormData({ ...formData, price: Number(v) })} />
 
             <div>
               <Label>Image</Label>
@@ -274,9 +296,10 @@ function AdminProductsPageContent() {
             <div className="p-4 space-y-2">
               <h3 className="font-semibold">{highlightText(p.name || '', searchQuery)}</h3>
               <p><span className="font-semibold">Model : </span>{highlightText(p.model || '', searchQuery)}</p>
-              <div className="flex justify-between">
+              <p><span className="font-semibold">Features : </span>{highlightText(p.features || 'There is no features', searchQuery)}</p>
+              <div className="flex justify-between mt-5">
                 <span>{highlightText(p.category || '', searchQuery)}</span>
-                <span>₹{p.price}</span>
+                <span className="text-primary font-semibold">₹{p.price}</span>
               </div>
               <div className="flex gap-2">
                 <Button size="sm" onClick={() => handleEdit(p)}><Edit className="w-3 h-3" /> Edit</Button>

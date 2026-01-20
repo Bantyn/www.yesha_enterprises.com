@@ -5,6 +5,7 @@ export type GeyserModel = {
   name: string;
   series: string;
   capacity: string;
+  features: string;
   image: string;
   price: string;
 };

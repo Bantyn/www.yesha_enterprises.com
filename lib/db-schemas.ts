@@ -2,6 +2,25 @@
 import { ObjectId } from "mongodb"
 
 /* =======================
+   CATEGORIES
+======================= */
+
+/* UI-safe category */
+export type Category = {
+  _id?: string
+  name: string
+  createdAt?: string
+}
+
+/* Mongo insert */
+export type CategoryInsert = Omit<Category, "_id">
+
+/* Mongo document */
+export type CategoryDocument = CategoryInsert & {
+  _id: ObjectId
+}
+
+/* =======================
    PRODUCTS
 ======================= */
 
@@ -12,6 +31,7 @@ export type Product = {
   price: number
   model: string
   category: string
+  features: string
   image: string
   capacity: string
   description?: string
@@ -82,7 +102,11 @@ export type ContactDocument = ContactInsert & {
 
 export const PRODUCT_CATEGORIES = [
   "Gas Geyser",
-  "Pressure Pump",
-  "Iron",
   "Storage Tank Geyser",
+  "Pressure Pump",
+  "Parts",
+  "Iron",
 ] as const
+/* =======================
+   DEPRECATED: Use /api/categories instead for dynamic categories
+======================= */

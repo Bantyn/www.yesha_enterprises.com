@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Menu,
   X,
+  Layers,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -85,6 +86,7 @@ export default function AdminLayout({
   const navItems = [
     { icon: LayoutDashboard, label: "Dashboard", href: "/admin", badge: null },
     { icon: Package, label: "Products", href: "/admin/products", badge: null },
+    { icon: Layers, label: "Categories", href: "/admin/categories", badge: null },
     {
       icon: Calendar,
       label: "Bookings",
@@ -182,7 +184,7 @@ export default function AdminLayout({
                   router.push(item.href)
                   setIsMobileMenuOpen(false)
                 }}
-                className={`md:w-full flex items-center justify-center md:justify-between md:px-4 md:py-3  md:h-auto h-30 w-30 md:rounded-lg rounded-3xl transition-all duration-300
+                className={`md:w-full flex items-center justify-center md:justify-between md:px-4 md:py-3  md:h-auto h-24 w-24 md:rounded-lg rounded-3xl transition-all duration-300
                 ${
                   isActive
                     ? "bg-primary text-white"

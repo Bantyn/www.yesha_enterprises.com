@@ -4,17 +4,36 @@ import { useEffect, useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import type { Product } from "@/lib/db-schemas"
-import { PRODUCT_CATEGORIES } from "@/lib/db-schemas"
 import { motion, AnimatePresence } from "framer-motion"
 import { Calendar } from "lucide-react"
 import { useBooking, type GeyserModel } from "@/hooks/use-booking"
 
+interface Category {
+  _id: string
+  name: string
+}
+
 export default function CollectionPage() {
   const [products, setProducts] = useState<Product[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [loading, setLoading] = useState(true)
 
   const openBooking = useBooking((state) => state.openBooking)
+
+  // Fetch categories
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const res = await fetch("/api/categories")
+        const data = await res.json()
+        setCategories(data.categories || [])
+      } catch (error) {
+        console.error("Error fetching categories:", error)
+      }
+    }
+    fetchCategories()
+  }, [])
 
   useEffect(() => {
     async function fetchProducts() {
@@ -43,6 +62,7 @@ export default function CollectionPage() {
     name: product.name,
     series: product.category,
     capacity: product.capacity,
+    features: product.features,
     image: product.image,
     price: `₹${product.price.toLocaleString()}`,
   })
@@ -68,12 +88,24 @@ export default function CollectionPage() {
       {/* Category Filter (UNCHANGED) */}
       <section className="px-6 max-w-7xl mx-auto">
         <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-secondary/40 backdrop-blur border border-border">
-          {["all", ...PRODUCT_CATEGORIES].map((cat) => {
-            const active = selectedCategory === cat
+          <button
+            key="all"
+            onClick={() => setSelectedCategory("all")}
+            className={`px-6 py-2 rounded-full text-[11px] uppercase tracking-widest transition-all
+              ${selectedCategory === "all"
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "bg-neutral-200 hover:bg-background border border-border"
+              }
+            `}
+          >
+            All Products
+          </button>
+          {categories.map((cat) => {
+            const active = selectedCategory === cat.name
             return (
               <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
+                key={cat._id}
+                onClick={() => setSelectedCategory(cat.name)}
                 className={`px-6 py-2 rounded-full text-[11px] uppercase tracking-widest transition-all
                   ${active
                     ? "bg-primary text-primary-foreground shadow-md"
@@ -81,7 +113,7 @@ export default function CollectionPage() {
                   }
                 `}
               >
-                {cat === "all" ? "All Products" : cat}
+                {cat.name}
               </button>
             )
           })}
@@ -117,14 +149,14 @@ export default function CollectionPage() {
                     exit={{ opacity: 0 }}
                     transition={{ delay: idx * 0.06, ease: "easeOut" }}
                     className="
-    group relative rounded-3xl
-    bg-secondary/40 backdrop-blur
-    border border-neutral-200/50 shadow-lg
-    overflow-hidden
-    transition-shadow duration-500
-    will-change-transform
-    
-  "
+                      group relative rounded-3xl
+                      bg-secondary/40 backdrop-blur
+                      border border-neutral-200/50 shadow-lg
+                      overflow-hidden
+                      transition-shadow duration-500
+                      will-change-transform
+                      
+                    "
                   >
                     {/* Image Wrapper (FIXED HEIGHT) */}
                     <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-background/40 to-background">
@@ -132,32 +164,32 @@ export default function CollectionPage() {
                         src={product.image || "/placeholder.svg"}
                         alt={product.name}
                         className="
-        object-contain w-full h-full
-        transition-transform duration-700 ease-out
-        group-hover:scale-110
-      "
+                        object-contain w-full h-full
+                        transition-transform duration-700 ease-out
+                        group-hover:scale-110
+                      "
                       />
 
                       {/* Dark overlay for focus */}
                       <div className="
-      absolute inset-0
-      bg-black/0
-      group-hover:bg-black/10
-      transition-colors duration-500
-    " />
+                          absolute inset-0
+                          bg-black/0
+                          group-hover:bg-black/10
+                          transition-colors duration-500
+                        " />
 
                       {/* Booking Button (NO LAYOUT SHIFT) */}
                       <button
                         onClick={() => openBooking(model)}
                         className="
-        absolute bottom-0 left-0 w-full
-        md:translate-y-full group-hover:translate-y-0
-        bg-primary text-primary-foreground
-        py-4
-        flex items-center justify-center gap-2
-        uppercase tracking-widest text-[10px] font-semibold
-        transition-transform duration-500 ease-out
-      "
+                            absolute bottom-0 left-0 w-full
+                            md:translate-y-full group-hover:translate-y-0
+                            bg-primary text-primary-foreground
+                            py-4
+                            flex items-center justify-center gap-2
+                            uppercase tracking-widest text-[10px] font-semibold
+                            transition-transform duration-500 ease-out
+                          "
                       >
                         <Calendar className="w-4 h-4" />
                         Book Installation
@@ -172,6 +204,9 @@ export default function CollectionPage() {
 
                       <h3 className="text-lg font-semibold leading-snug line-clamp-2">
                         {product.name}
+                      </h3>
+                      <h3 className="text-sm tracking-wider line-clamp-2 -mt-2">
+                        {product.features ? "Features : " + product.features : ""}
                       </h3>
 
                       <div className="flex items-center justify-between text-sm">
