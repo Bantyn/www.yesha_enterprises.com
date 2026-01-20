@@ -7,6 +7,7 @@ export const productToGeyserModel = (p: Product): GeyserModel => ({
   name: p.name,
   series: p.category,
   capacity: p.capacity,
+  features: p.features || "",
   image: p.image,
   price: `₹${p.price.toLocaleString()}`,
 })
