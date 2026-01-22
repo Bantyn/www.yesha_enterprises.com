@@ -1,275 +1,288 @@
-"use client"
+'use client';
 
-import { useEffect, useState, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Mail, Phone, Trash2, Reply, Eye, EyeOff, Search } from "lucide-react"
-import { motion } from "framer-motion"
-import type { ContactRequest } from "@/lib/db-schemas"
+import { useEffect, useState } from 'react';
+import { useAdmin } from '../admin-provider';
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { 
+  Mail, 
+  Phone, 
+  Calendar, 
+  IndianRupee,
+  Clock,
+  Search,
+  Eye,
+  Trash2
+} from 'lucide-react';
+import { Contact } from '@/lib/db-schemas';
 
-// Helper function to highlight matching text
-const highlightText = (text: string, query: string) => {
-  if (!query || !text) return text
-  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
-  const parts = text.split(regex)
-  return parts.map((part, index) =>
-    regex.test(part) ? <strong key={index}>{part}</strong> : part
-  )
-}
+export default function AdminContactsPage() {
+  const { user, loading } = useAdmin();
+  const router = useRouter();
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [loadingContacts, setLoadingContacts] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('all');
 
-function AdminContactsContent() {
-  const [contacts, setContacts] = useState<ContactRequest[]>([])
-  const [loading, setLoading] = useState(true)
-  const [selectedContact, setSelectedContact] = useState<ContactRequest | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-  const searchParams = useSearchParams()
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/admin/login');
+      return;
+    }
+
+    if (user) {
+      fetchContacts();
+    }
+  }, [user, loading, router]);
 
   const fetchContacts = async () => {
     try {
-      setLoading(true)
-      const response = await fetch("/api/contacts")
-      const { contacts } = await response.json()
-      setContacts(contacts)
-    } catch (error) {
-      console.error("[v0] Error fetching contacts:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchContacts()
-  }, [])
-
-  useEffect(() => {
-    const search = searchParams.get('search')
-    if (search) {
-      setSearchQuery(search)
-    }
-  }, [searchParams])
-
-  const updateStatus = async (id: string, status: string) => {
-    try {
-      await fetch("/api/contacts", {
-        method: "PUT",
-        body: JSON.stringify({ id, status })
-      })
-      fetchContacts()
-    } catch (error) {
-      console.error("[v0] Error updating contact:", error)
-    }
-  }
-
-  const deleteContact = async (id: string) => {
-    if (!confirm("Delete this contact message?")) return
-    try {
-      await fetch(`/api/contacts?id=${id}`, { method: "DELETE" })
-      fetchContacts()
-      if (selectedContact?._id === id) {
-        setSelectedContact(null)
+      setLoadingContacts(true);
+      const params = new URLSearchParams();
+      if (selectedStatus !== 'all') {
+        params.set('status', selectedStatus);
+      }
+      
+      const response = await fetch(`/api/contact?${params}`);
+      if (response.ok) {
+        const data = await response.json();
+        setContacts(data.contacts);
       }
     } catch (error) {
-      console.error("Delete error:", error)
+      console.error('Failed to fetch contacts:', error);
+    } finally {
+      setLoadingContacts(false);
     }
-  }
+  };
 
-  const replyToContact = (contact: ContactRequest) => {
-    const subject = encodeURIComponent(`Re: ${contact.subject}`)
-    const body = encodeURIComponent(`Dear ${contact.name},\n\nThank you for your message: "${contact.message}"\n\nBest regards,\nYesha Enterprises Team`)
-    window.open(`mailto:${contact.email}?subject=${subject}&body=${body}`)
-  }
+  const updateContactStatus = async (contactId: string, status: string) => {
+    try {
+      const response = await fetch(`/api/contact/${contactId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      });
+
+      if (response.ok) {
+        fetchContacts(); // Refresh the list
+      }
+    } catch (error) {
+      console.error('Failed to update contact status:', error);
+    }
+  };
+
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    contact.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    contact.company?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const getStatusColor = (status: string) => {
-    const colors: Record<string, string> = {
-      unread: "bg-red-100 text-red-800",
-      read: "bg-blue-100 text-blue-800",
-      replied: "bg-green-100 text-green-800",
+    switch (status) {
+      case 'new': return 'bg-blue-100 text-blue-800';
+      case 'contacted': return 'bg-yellow-100 text-yellow-800';
+      case 'in-discussion': return 'bg-purple-100 text-purple-800';
+      case 'proposal-sent': return 'bg-orange-100 text-orange-800';
+      case 'closed': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
-    return colors[status] || "bg-gray-100 text-gray-800"
-  }
+  };
 
-  if (loading) {
+  const formatProjectType = (type: string) => {
+    const types: Record<string, string> = {
+      'website': 'Website Development',
+      'web-app': 'Web Application',
+      'mern-stack': 'MERN Stack Application',
+      'nextjs': 'Next.js Website',
+      'dashboard': 'Admin Dashboard',
+      'api': 'API Development',
+      'other': 'Other'
+    };
+    return types[type] || type;
+  };
+
+  const formatBudget = (budget: string) => {
+    const budgets: Record<string, string> = {
+      'under-5k': 'Under ₹5,000',
+      '5k-10k': '₹5,000 - ₹10,000',
+      '10k-25k': '₹10,000 - ₹25,000',
+      '25k-50k': '₹25,000 - ₹50,000',
+      '50k-plus': '₹50,000+'
+    };
+    return budgets[budget] || budget;
+  };
+
+  if (loading || !user) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="space-y-10 mx-auto">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl md:text-3xl font-semibold text-neutral-900">
-            Contact Messages
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Contact Management
           </h1>
-          <p className="text-neutral-600 mt-1">
-            {contacts.length} total messages
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage and respond to client inquiries
           </p>
         </div>
       </div>
 
-      {/* Search */}
-      <div className="flex gap-4">
-        <div className="flex-1">
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
-            placeholder="Search contacts by name, email, subject, or message..."
+            placeholder="Search contacts..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full"
+            className="pl-10"
           />
         </div>
+        
+        <div className="flex gap-2">
+          {['all', 'new', 'contacted', 'in-discussion', 'proposal-sent', 'closed'].map((status) => (
+            <Button
+              key={status}
+              variant={selectedStatus === status ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                setSelectedStatus(status);
+                fetchContacts();
+              }}
+              className="capitalize"
+            >
+              {status === 'all' ? 'All' : status.replace('-', ' ')}
+            </Button>
+          ))}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Contacts List */}
-        <div className="lg:col-span-1 space-y-4">
-          {(() => {
-            const filteredContacts = contacts.filter((contact) =>
-              !searchQuery ||
-              (contact.name && typeof contact.name === 'string' && contact.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-              (contact.email && typeof contact.email === 'string' && contact.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
-              (contact.subject && typeof contact.subject === 'string' && contact.subject.toLowerCase().includes(searchQuery.toLowerCase())) ||
-              (contact.message && typeof contact.message === 'string' && contact.message.toLowerCase().includes(searchQuery.toLowerCase())) ||
-              (contact.phone && typeof contact.phone === 'string' && contact.phone.includes(searchQuery)) ||
-              (contact._id && contact._id.toString().includes(searchQuery))
-            )
-
-            if (contacts.length === 0) {
-              return (
-                <Card className="p-8 text-center">
-                  <Mail className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-600">No contact messages yet</p>
-                </Card>
-              )
-            }
-
-            if (filteredContacts.length === 0) {
-              return (
-                <Card className="p-8 text-center">
-                  <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-600">No contacts match "{searchQuery}"</p>
-                </Card>
-              )
-            }
-
-            return filteredContacts.map((contact, idx) => (
-              <motion.div
-                key={contact._id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-              >
-                <Card
-                  className={`p-4 cursor-pointer transition-all hover:shadow-md ${
-                    selectedContact?._id === contact._id ? 'ring-2 ring-primary' : ''
-                  }`}
-                  onClick={() => setSelectedContact(contact)}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-sm truncate">{highlightText(contact.name || '', searchQuery)}</h3>
-                    <Badge className={getStatusColor(contact.status)}>
-                      {contact.status}
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-1 truncate">{highlightText(contact.subject || '', searchQuery)}</p>
-                  <p className="text-xs text-gray-500">
-                    {new Date(contact.createdAt).toLocaleDateString()}
-                  </p>
-                </Card>
-              </motion.div>
-            ))
-          })()}
+      {/* Contacts List */}
+      {loadingContacts ? (
+        <div className="grid grid-cols-1 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="animate-pulse">
+              <div className="bg-gray-200 dark:bg-gray-700 rounded-lg h-32"></div>
+            </div>
+          ))}
         </div>
-
-        {/* Contact Details */}
-        <div className="lg:col-span-2">
-          {selectedContact ? (
-            <Card className="p-6">
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-semibold mb-2">{highlightText(selectedContact.name || '', searchQuery)}</h2>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <div className="flex items-center gap-1">
-                      <Mail className="w-4 h-4" />
-                      {highlightText(selectedContact.email || '', searchQuery)}
-                    </div>
-                    {selectedContact.phone && (
-                      <div className="flex items-center gap-1">
-                        <Phone className="w-4 h-4" />
-                        {highlightText(selectedContact.phone || '', searchQuery)}
-                      </div>
-                    )}
+      ) : (
+        <div className="grid grid-cols-1 gap-4">
+          {filteredContacts.map((contact) => (
+            <Card key={contact._id} className="hover:shadow-md transition-shadow">
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-lg">{contact.name}</CardTitle>
+                    <CardDescription className="flex items-center space-x-4 mt-1">
+                      <span className="flex items-center space-x-1">
+                        <Mail className="h-4 w-4" />
+                        <span>{contact.email}</span>
+                      </span>
+                      {contact.phone && (
+                        <span className="flex items-center space-x-1">
+                          <Phone className="h-4 w-4" />
+                          <span>{contact.phone}</span>
+                        </span>
+                      )}
+                    </CardDescription>
+                  </div>
+                  <Badge className={getStatusColor(contact.status)}>
+                    {contact.status.replace('-', ' ')}
+                  </Badge>
+                </div>
+              </CardHeader>
+              
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div className="flex items-center space-x-2">
+                    <Eye className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm">{formatProjectType(contact.projectType)}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <IndianRupee className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm">{formatBudget(contact.budget)}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Clock className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm capitalize">{contact.timeline.replace('-', ' ')}</span>
                   </div>
                 </div>
-                <Badge className={getStatusColor(selectedContact.status)}>
-                  {selectedContact.status}
-                </Badge>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="font-semibold mb-2">Subject: {highlightText(selectedContact.subject || '', searchQuery)}</h3>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="whitespace-pre-wrap">{highlightText(selectedContact.message || '', searchQuery)}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-500">
-                  Received on {new Date(selectedContact.createdAt).toLocaleString()}
+                
+                {contact.company && (
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    <strong>Company:</strong> {contact.company}
+                  </p>
+                )}
+                
+                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                  {contact.message}
                 </p>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="bg-green-50 text-green-700 border hover:text-white hover:bg-green-700"
-                    onClick={() => updateStatus(selectedContact._id!, selectedContact.status === 'unread' ? 'read' : 'unread')}
-                  >
-                    {selectedContact.status === 'unread' ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                    Mark as {selectedContact.status === 'unread' ? 'Read' : 'Unread'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => replyToContact(selectedContact)}
-                  >
-                    <Reply className="w-4 h-4 mr-2" />
-                    Reply
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => deleteContact(selectedContact._id!)}
-                    className="bg-red-100 text-red-600 border hover:text-white hover:bg-red-600"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Delete
-                  </Button>
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-gray-500">
+                    {new Date(contact.createdAt).toLocaleDateString()} at{' '}
+                    {new Date(contact.createdAt).toLocaleTimeString()}
+                  </span>
+                  
+                  <div className="flex space-x-2">
+                    {contact.status === 'new' && (
+                      <Button
+                        size="sm"
+                        onClick={() => updateContactStatus(contact._id!, 'contacted')}
+                      >
+                        Mark as Contacted
+                      </Button>
+                    )}
+                    {contact.status === 'contacted' && (
+                      <Button
+                        size="sm"
+                        onClick={() => updateContactStatus(contact._id!, 'in-discussion')}
+                      >
+                        In Discussion
+                      </Button>
+                    )}
+                    {contact.status === 'in-discussion' && (
+                      <Button
+                        size="sm"
+                        onClick={() => updateContactStatus(contact._id!, 'proposal-sent')}
+                      >
+                        Proposal Sent
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => window.open(`mailto:${contact.email}`)}
+                    >
+                      <Mail className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              </CardContent>
             </Card>
-          ) : (
-            <Card className="p-12 text-center">
-              <Mail className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-600 mb-2">Select a message</h3>
-              <p className="text-gray-500">Choose a contact message from the list to view details</p>
-            </Card>
+          ))}
+          
+          {filteredContacts.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 dark:text-gray-400">
+                No contacts found matching your criteria.
+              </p>
+            </div>
           )}
         </div>
-      </div>
+      )}
     </div>
-  )
-}
-
-export default function AdminContactsPage() {
-  return (
-    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
-      <AdminContactsContent />
-    </Suspense>
-  )
+  );
 }

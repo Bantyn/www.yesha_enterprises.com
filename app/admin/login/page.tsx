@@ -1,165 +1,169 @@
-"use client"
+'use client';
 
-import React, { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Shield, Eye, EyeOff } from "lucide-react"
-import { motion } from "framer-motion"
-import toast, { Toaster } from "react-hot-toast"
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useAdmin } from '../admin-provider';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Code, Loader2, LogIn } from 'lucide-react';
+
+const loginSchema = z.object({
+  email: z.string().email('Valid email is required'),
+  password: z.string().min(1, 'Password is required'),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function AdminLoginPage() {
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user, loading, login } = useAdmin();
+  const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/admin');
+    }
+  }, [user, loading, router]);
+
+  const onSubmit = async (data: LoginFormData) => {
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/admin/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        toast.success("Login successful!")
-        setTimeout(() => {
-          router.push("/admin")
-          router.refresh()
-        }, 800)
-      } else {
-        setError(data.error || "Invalid password")
+      const success = await login(data.email, data.password);
+      if (success) {
+        router.push('/admin');
       }
-    } catch {
-      setError("Login failed. Please try again.")
     } finally {
-      setLoading(false)
+      setIsSubmitting(false);
     }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (user) {
+    return null; // Will redirect in useEffect
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      <Toaster position="top-center" reverseOrder={false} />
-
-      {/* Left Panel */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-        className="hidden md:flex md:w-1/2  items-center justify-center bg-gradient-to-r from-black to-transparent relative overflow-hidden"
-      >
-        <div className="absolute inset-0">
-          {/* Optional shapes / floating graphics */}
-          <motion.div
-            className="absolute w-80 h-80 bg-white/10 rounded-full top-[-10%] left-[-10%]"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-          />
-          <motion.div
-            className="absolute w-96 h-96 bg-white/5 rounded-full bottom-[-20%] right-[-15%]"
-            animate={{ rotate: -360 }}
-            transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-          />
-        </div>
-        <div className="relative z-10 text-center px-6 md:px-12 max-w-2xl mx-auto">
-  <h1 className="text-5xl font-bold text-white mb-4">Welcome Back!</h1>
-  <p className="text-lg text-white/80 mb-6 mx-auto max-w-xl ">
-    Manage your bookings, track all installations, and streamline your workflow from one place.
-  </p>
-
-  <div className="flex flex-col gap-4 text-left">
-    <div className="flex items-center gap-3 tracking-wide hover:bg-black/20 hover:-translate-y-1 border transition-all bg-black/10 p-6 hover:shadow-xl rounded-lg">
-      <p className="text-white/90 text-center w-full font-thin">View and update all bookings in real-time</p>
-    </div>
-    <div className="flex items-center gap-3 tracking-wide hover:bg-black/20 hover:-translate-y-1 border transition-all bg-black/10 p-6 hover:shadow-xl rounded-lg">
-      <p className="text-white/90 text-center w-full font-thin">Schedule and confirm installation appointments</p>
-    </div>
-    <div className="flex items-center gap-3 tracking-wide hover:bg-black/20 hover:-translate-y-1 border transition-all bg-black/10 p-6 hover:shadow-xl rounded-lg">
-      <p className="text-white/90 text-center w-full font-thin">Communicate directly with customers via WhatsApp</p>
-    </div>
-    <div className="flex items-center gap-3 tracking-wide hover:bg-black/20 hover:-translate-y-1 border transition-all bg-black/10 p-6 hover:shadow-xl rounded-lg">
-      <p className="text-white/90 text-center w-full font-thin">Track all completed and pending installations at a glance</p>
-    </div>
-  </div>
-
-  <p className="mt-8 text-white/50 text-sm">
-    Trusted by hundreds of service teams to streamline operations and enhance customer satisfaction.
-  </p>
-</div>
-
-      </motion.div>
-
-      {/* Right Panel */}
-      <motion.div
-         initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-        className="md:w-1/2 flex items-center justify-center bg-neutral-50"
-        >
-        <div className="w-full max-w-md px-6 md:px-10 py-10">
-          <div className="flex flex-col items-center mb-10">
-            <div className="w-20 h-20 bg-indigo-100/50 rounded-full flex items-center justify-center mb-4 shadow-lg">
-              <Shield className="w-10 h-10 text-black" />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        {/* Header */}
+        <div className="text-center">
+          <div className="flex justify-center">
+            <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+              <Code className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
-            <h2 className="text-3xl font-bold text-neutral-900 mb-1">Admin Login</h2>
-            <p className="text-sm text-neutral-600 text-center">
-              Enter your password to access the dashboard
-            </p>
           </div>
-
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="relative w-full">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                className="w-full pr-12 border-neutral-300 focus:border-indigo-500 focus:ring-indigo-200 bg-white"
-                required
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-indigo-600 transition"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm text-center"
-              >
-                {error}
-              </motion.div>
-            )}
-
-            <Button
-              type="submit"
-              className="w-full bg-black text-white font-semibold py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-101 focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1"
-              disabled={loading}
-            >
-              {loading ? "Authenticating..." : "Login"}
-            </Button>
-          </form>
-
-          <p className="text-center text-sm text-neutral-500 mt-6">
-            YESHA ENTERPRISES Geyser Admin Panel
+          <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
+            Web Buddies Admin
+          </h2>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Sign in to access the admin dashboard
           </p>
         </div>
-      </motion.div>
+
+        {/* Login Form */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-center">Sign In</CardTitle>
+            <CardDescription className="text-center">
+              Enter your credentials to access the admin panel
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div>
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  {...register('email')}
+                  placeholder="admin@webbuddies.com"
+                  className="mt-1"
+                  disabled={isSubmitting}
+                />
+                {errors.email && (
+                  <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  {...register('password')}
+                  placeholder="Enter your password"
+                  className="mt-1"
+                  disabled={isSubmitting}
+                />
+                {errors.password && (
+                  <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </>
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+
+        {/* Demo Credentials */}
+        <Card className="hidden bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <h3 className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
+                Demo Credentials
+              </h3>
+              <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                <p><strong>Email:</strong> patelbanty1260@gmail.com</p>
+                <p><strong>Password:</strong> Admin@123</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Footer */}
+        <div className="text-center">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            © 2024 Web Buddies. All rights reserved.
+          </p>
+        </div>
+      </div>
     </div>
-  )
+  );
 }

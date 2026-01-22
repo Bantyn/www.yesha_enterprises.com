@@ -1,179 +1,147 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 /* -------------------------------
-   Dark Mode Variant
--------------------------------- */
-@custom-variant dark (&:is(.dark *));
-
-/* -------------------------------
-   Glass Theme Colors
+   Web Buddies Color Theme
 -------------------------------- */
 :root {
-  --background: oklch(0.99 0.005 30);
-  /* Soft warm glass */
-  --foreground: oklch(0.2 0.01 30);
-  --card: rgba(255, 255, 255, 0.1);
-  /* glass card */
-  --card-foreground: oklch(0.2 0.01 30);
-  --popover: rgba(255, 255, 255, 0.1);
-  --popover-foreground: oklch(0.2 0.01 30);
-  --primary: oklch(0.7 0.12 45);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: rgba(255, 255, 255, 0.05);
-  --secondary-foreground: oklch(0.2 0.01 30);
-  --muted: rgba(255, 255, 255, 0.05);
-  --muted-foreground: oklch(0.5 0.01 30);
-  --accent: rgba(255, 255, 255, 0.05);
-  --accent-foreground: oklch(0.2 0.01 30);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: rgba(255, 255, 255, 0.2);
-  --input: rgba(255, 255, 255, 0.1);
-  --ring: oklch(0.708 0 0);
+  /* Web Buddies Brand Colors */
+  --wb-primary: #C645F9;
+  --wb-secondary: #5E6CE7;
+  --wb-white: #FFFFFF;
+  --wb-dark: #0D0425;
+  
+  /* Light Theme Colors */
+  --background: 255 255 255;
+  --foreground: 13 4 37;
+  --card: 255 255 255;
+  --card-foreground: 13 4 37;
+  --popover: 255 255 255;
+  --popover-foreground: 13 4 37;
+  --primary: 198 69 249;
+  --primary-foreground: 255 255 255;
+  --secondary: 241 245 249;
+  --secondary-foreground: 13 4 37;
+  --muted: 241 245 249;
+  --muted-foreground: 100 116 139;
+  --accent: 241 245 249;
+  --accent-foreground: 13 4 37;
+  --destructive: 239 68 68;
+  --destructive-foreground: 255 255 255;
+  --border: 226 232 240;
+  --input: 226 232 240;
+  --ring: 94 108 231;
   --radius: 0.5rem;
 }
 
 /* Dark Mode */
 .dark {
-  --background: rgba(0, 0, 0, 0.5);
-  --foreground: oklch(0.98 0.005 30);
-  --card: rgba(255, 255, 255, 0.05);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: rgba(255, 255, 255, 0.05);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: rgba(255, 255, 255, 0.05);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: rgba(255, 255, 255, 0.05);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: rgba(255, 255, 255, 0.05);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: rgba(255, 255, 255, 0.15);
-  --input: rgba(255, 255, 255, 0.1);
-  --ring: oklch(0.439 0 0);
+  --background: 13 4 37;
+  --foreground: 248 250 252;
+  --card: 30 20 60;
+  --card-foreground: 248 250 252;
+  --popover: 30 20 60;
+  --popover-foreground: 248 250 252;
+  --primary: 198 69 249;
+  --primary-foreground: 13 4 37;
+  --secondary: 51 65 85;
+  --secondary-foreground: 248 250 252;
+  --muted: 51 65 85;
+  --muted-foreground: 148 163 184;
+  --accent: 51 65 85;
+  --accent-foreground: 248 250 252;
+  --destructive: 220 38 38;
+  --destructive-foreground: 248 250 252;
+  --border: 51 65 85;
+  --input: 51 65 85;
+  --ring: 94 108 231;
 }
 
-/* -------------------------------
-   Theme & Typography
--------------------------------- */
-@theme inline {
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui;
-  --font-serif: var(--font-serif), ui-serif, Georgia, serif;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+/* Dark mode gradient backgrounds */
+.dark .wb-gradient-soft {
+  background: linear-gradient(180deg, #0D0425, #1E1B4B);
+}
 
-  /* Animations */
-  --animate-reveal-up: reveal-up 1s cubic-bezier(0.16, 1, 0.3, 1);
-  --animate-float: float 6s ease-in-out infinite;
+/* Base Styles */
+* {
+  border-color: rgb(var(--border));
+}
 
-  @keyframes reveal-up {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
+body {
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
 
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
+/* Custom animations for Web Buddies */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
   }
-
-  @keyframes float {
-
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-
-    50% {
-      transform: translateY(-10px);
-    }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
   }
 }
 
-/* -------------------------------
-   Base Styles
--------------------------------- */
-@layer base {
-  * {
-    @apply outline-none;
-    box-sizing: border-box;
-  }
+.animate-blob {
+  animation: blob 7s infinite;
+}
 
-  body {
-    @apply bg-background text-foreground font-sans;
-    backdrop-filter: blur(20px);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
 
-  /* Glass Cards */
-  .card,
-  .modal,
-  .popover,
-  .booking-modal {
-    background: var(--card);
-    color: var(--card-foreground);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    transition: all 0.3s ease-in-out;
-  }
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
 
-  .card:hover,
-  .modal:hover,
-  .popover:hover,
-  .booking-modal:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  }
+/* Line clamp utility */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
 
-  /* Inputs */
-  input,
-  textarea,
-  select {
-    background: var(--input);
-    border: 1px solid var(--border);
-    color: var(--foreground);
-    border-radius: var(--radius-sm);
-    padding: 0.5rem 0.75rem;
-    backdrop-filter: blur(10px);
-    transition: border 0.2s, transform 0.2s;
-  }
+/* Web Buddies specific styles */
+.wb-gradient-primary {
+  background: linear-gradient(135deg, #C645F9, #5E6CE7);
+}
 
-  input:focus,
-  textarea:focus,
-  select:focus {
-    border-color: var(--primary);
-    transform: scale(1.02);
-  }
+.wb-gradient-soft {
+  background: linear-gradient(180deg, #FFFFFF, #EEF1FF);
+}
 
-  /* Buttons */
-  button {
-    border-radius: var(--radius-md);
-    transition: all 0.2s;
-  }
+.wb-gradient-dark {
+  background: linear-gradient(135deg, #0D0425, #2A1F4A);
+}
 
-  button:hover {
-    transform: scale(1.05);
-  }
+.wb-text-primary {
+  color: #C645F9;
+}
+
+.wb-text-secondary {
+  color: #5E6CE7;
+}
+
+.wb-bg-primary {
+  background-color: #C645F9;
+}
+
+.wb-bg-secondary {
+  background-color: #5E6CE7;
+}
+
+.wb-border-primary {
+  border-color: #C645F9;
+}
+
+.wb-border-secondary {
+  border-color: #5E6CE7;
 }
