@@ -28,6 +28,7 @@ const services = [
 const company = [
   { name: 'About Us', href: '/about' },
   { name: 'Our Projects', href: '/projects' },
+  { name: 'Pricing Plans', href: '/pricing' },
   { name: 'Contact', href: '/contact' },
   { name: 'Privacy Policy', href: '/privacy' },
   { name: 'Terms of Service', href: '/terms' },

@@ -1,4 +1,4 @@
-const { connectToDatabase } = require('./lib/db-utils');
+const { connectToDatabase } = require('../lib/db-utils');
 
 async function testConnection() {
     console.log('Testing DB Connection...');

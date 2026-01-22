@@ -73,7 +73,7 @@ export default function WebsiteDevelopmentPage() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-12 wb-gradient-soft">
+      <section className="min-h-screen flex items-center justify-center pt-24 pb-12 wb-gradient-soft">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4">

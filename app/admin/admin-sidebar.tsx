@@ -81,7 +81,7 @@ function SidebarContent({ pathname }: { pathname: string }) {
     <>
       <div className="flex flex-1 flex-col pt-5 pb-4 overflow-y-auto">
         <div className="flex items-center flex-shrink-0 px-4">
-          <Code className="h-8 w-8 text-blue-600" />
+          <img src="/favicon.ico" alt="Web Buddies" width={30} height={30} />
           <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">
             Web Buddies
           </span>
@@ -94,14 +94,14 @@ function SidebarContent({ pathname }: { pathname: string }) {
                 key={item.name}
                 href={item.href}
                 className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${isActive
-                    ? 'bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
+                  ? 'bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
                   }`}
               >
                 <item.icon
                   className={`mr-3 h-5 w-5 ${isActive
-                      ? 'text-blue-500 dark:text-blue-400'
-                      : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300'
+                    ? 'text-blue-500 dark:text-blue-400'
+                    : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300'
                     }`}
                 />
                 {item.name}

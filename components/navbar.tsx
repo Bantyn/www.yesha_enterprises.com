@@ -24,27 +24,27 @@ import {
 
 const navigation = [
   { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
   {
-    name: 'Pricing',
-    href: '/pricing',
+    name: 'Services',
+    href: '/services',
     submenu: [
-      { name: 'Website Development', href: '/pricing/website-development' },
-      { name: 'MERN Stack Apps', href: '/pricing/mern-stack' },
-      { name: 'Next.js Websites', href: '/pricing/nextjs' },
-      { name: 'Admin Dashboards', href: '/pricing/dashboards' },
-      { name: 'API Development', href: '/pricing/api-development' },
+      { name: 'Website Development', href: '/services/website-development' },
+      { name: 'MERN Stack Apps', href: '/services/mern-stack' },
+      { name: 'Next.js Websites', href: '/services/nextjs' },
+      { name: 'Admin Dashboards', href: '/services/dashboards' },
+      { name: 'API Development', href: '/services/api-development' },
     ],
   },
+  { name: 'Pricing', href: '/pricing' },
   { name: 'Projects', href: '/projects' },
   { name: 'Contact', href: '/contact' },
+  { name: 'About', href: '/about' },
+
 ];
 
 export function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [dark, setDark] = useState(false);
 
 
@@ -74,7 +74,8 @@ export function Navbar() {
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="relative">
-            <Code className="h-7 w-7 text-[#C645F9] group-hover:rotate-12 transition-transform" />
+            {/* <img src="/favicon.ico" alt="Web Buddies" width={30} height={30} className='' /> */}
+            <Code className="h-7 w-7 text-[#C645F9] group-hover:rotate-12 transition-transform contrast-200 brightness-70" />
             <span className="absolute -inset-1 bg-gradient-to-r from-[#C645F9]/30 to-[#5E6CE7]/30 blur rounded-full opacity-0 group-hover:opacity-100 transition" />
           </div>
           <span className="font-bold text-lg tracking-tight">

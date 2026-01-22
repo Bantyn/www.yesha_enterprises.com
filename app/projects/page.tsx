@@ -2,13 +2,14 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { ProjectsGrid } from './projects-grid';
 import { ProjectsFilter } from './projects-filter';
+import { ServicesGrid } from './services-grid';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { SEOService, defaultSEOConfigs } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowRight, Code, Zap, Users } from 'lucide-react';
+import { ArrowRight, Code, Zap, Users, Loader2 } from 'lucide-react';
 
 export const metadata: Metadata = SEOService.generateMetadata(defaultSEOConfigs.projects);
 
@@ -24,7 +25,7 @@ export default function ProjectsPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-[#0D0425] dark:via-gray-900 dark:to-[#0D0425] overflow-hidden">
+      <section className="relative min-h-[60vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-[#0D0425] dark:via-gray-900 dark:to-[#0D0425] overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse"></div>
@@ -37,7 +38,7 @@ export default function ProjectsPage() {
               🚀 Our Portfolio
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Our Projects
+              Our Projects & Expertise
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12">
               Explore our portfolio of successful web development projects. From modern websites
@@ -62,13 +63,6 @@ export default function ProjectsPage() {
                 </div>
               ))}
             </div>
-
-            <Button asChild size="lg" className="wb-bg-primary hover:opacity-90 text-white px-8">
-              <Link href="/contact" className="flex items-center space-x-2">
-                <span>Start Your Project</span>
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-            </Button>
           </div>
         </div>
       </section>
@@ -76,6 +70,10 @@ export default function ProjectsPage() {
       {/* Projects Section */}
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Featured Work</h2>
+            <p className="text-gray-600 dark:text-gray-400 capitalize">Browse our recently completed projects</p>
+          </div>
           {/* Filter */}
           <div className="mb-8">
             <Suspense fallback={<div>Loading filters...</div>}>
@@ -86,6 +84,19 @@ export default function ProjectsPage() {
           {/* Projects Grid */}
           <Suspense fallback={<div>Loading projects...</div>}>
             <ProjectsGrid />
+          </Suspense>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-13 bg-gray-50/50 dark:bg-gray-800/20 border-y border-gray-100 dark:border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Our Specialized Services</h2>
+            <p className="text-gray-600 dark:text-gray-400 capitalize">We deliver excellence across multiple web technologies</p>
+          </div>
+          <Suspense fallback={<div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin wb-text-primary" /></div>}>
+            <ServicesGrid />
           </Suspense>
         </div>
       </section>
@@ -114,7 +125,6 @@ export default function ProjectsPage() {
           </div>
         </div>
       </section>
-
       <Footer />
 
       {/* Structured Data */}

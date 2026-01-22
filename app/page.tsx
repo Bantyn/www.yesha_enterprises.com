@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
-import { 
-  ArrowRight, 
-  Code, 
-  Zap, 
-  Shield, 
-  Users, 
-  Award, 
+import {
+  ArrowRight,
+  Code,
+  Zap,
+  Shield,
+  Users,
+  Award,
   Clock,
   CheckCircle,
   ExternalLink
@@ -53,7 +53,7 @@ function HeroSection() {
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
-            We specialize in MERN stack development, Next.js websites, and cutting-edge web applications. 
+            We specialize in MERN stack development, Next.js websites, and cutting-edge web applications.
             Transform your digital presence with our expert team of developers.
           </p>
 
@@ -121,43 +121,57 @@ function ServicesSection() {
   ];
 
   return (
-    <section className="py-20 bg-white dark:bg-gray-900">
+    <section className="py-20 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Our Services
+          <Badge variant="outline" className="mb-4 wb-border-primary wb-text-primary px-4 py-1">
+            Our Expertise
+          </Badge>
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            Specialized Development Services
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            We offer comprehensive web development services to help your business succeed online.
+            We deliver high-performance solutions using cutting-edge technologies.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="group hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="p-2 bg-gradient-to-r from-[#C645F9]/10 to-[#5E6CE7]/10 rounded-lg">
-                    <service.icon className="h-6 w-6 wb-text-primary" />
-                  </div>
-                  <CardTitle className="text-xl">{service.title}</CardTitle>
+            <Card key={index} className="group hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+              {/* Stylized Header */}
+              <div className="relative overflow-hidden rounded-t-lg bg-gradient-to-br from-[#C645F9]/10 to-[#5E6CE7]/10 h-48 flex items-center justify-center">
+                <div className="p-4 rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300 shadow-sm border border-white/20">
+                  <service.icon className="h-10 w-10 wb-text-primary" />
                 </div>
-                <CardDescription className="text-base">
+                <div className="absolute top-3 right-3">
+                  <Badge variant="secondary" className="bg-white/50 backdrop-blur-sm">
+                    Service
+                  </Badge>
+                </div>
+              </div>
+
+              <CardHeader className="flex-grow">
+                <CardTitle className="text-xl group-hover:wb-text-primary transition-colors">
+                  <Link href={service.href}>{service.title}</Link>
+                </CardTitle>
+                <CardDescription className="line-clamp-2">
                   {service.description}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 mb-6">
-                  {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span className="text-sm text-gray-600 dark:text-gray-300">{feature}</span>
-                    </li>
+
+              <CardContent className="pt-0">
+                {/* Features as Tech Badges */}
+                <div className="flex flex-wrap gap-1 mb-6">
+                  {service.features.map((feature, fIndex) => (
+                    <Badge key={fIndex} variant="outline" className="text-[10px] py-0 px-2 uppercase tracking-wider font-semibold bg-gray-50 dark:bg-white/5">
+                      {feature}
+                    </Badge>
                   ))}
-                </ul>
-                <Button asChild variant="outline" className="w-full group-hover:wb-bg-primary group-hover:text-white transition-colors">
-                  <Link href={service.href}>
-                    Learn More
+                </div>
+
+                <Button asChild className="w-full wb-bg-primary text-white hover:opacity-90 group/btn">
+                  <Link href={service.href} className="flex items-center justify-center gap-2">
+                    Explore Service <ArrowRight className="h-4 w-4 transform group-hover/btn:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
               </CardContent>
@@ -265,7 +279,7 @@ export default function HomePage() {
       <WhyChooseUsSection />
       <CTASection />
       <Footer />
-      
+
       {/* Structured Data */}
       <script
         type="application/ld+json"
