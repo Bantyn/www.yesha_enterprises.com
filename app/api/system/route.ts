@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         }
       },
       database: {
-        status: 'checking...'
+        status: 'disconnected'
       },
       timestamp: new Date().toISOString()
     }
@@ -57,10 +57,11 @@ export async function GET(request: NextRequest) {
     // Check database connection
     try {
       const db = await connectToDatabase()
+      const collections = await db.collections()
       systemInfo.database = {
         status: 'connected',
-        name: db.databaseName,
-        collections: await db.collections().then(cols => cols.length)
+        name: 'geyser_store',
+        collections: collections.length
       }
     } catch (dbError) {
       systemInfo.database = {
