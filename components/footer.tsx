@@ -71,7 +71,7 @@ export function Footer() {
           <h4 className="text-[10px] uppercase tracking-widest mb-6">Developers</h4>
           <ul className="space-y-3 text-sm font-light">
             <li>
-              <a href="https://web.buddies.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+              <a href="https://webbuddies.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
                 web_buddies.dev
               </a>
             </li>
