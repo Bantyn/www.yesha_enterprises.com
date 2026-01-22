@@ -4,7 +4,7 @@ import Link from "next/link"
 export function Footer() {
   return (
     <footer className="px-6 py-12 md:px-12 border-t border-border mt-24 bg-transparent ">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
         <div className="col-span-1 md:col-span-2">
           <h2 className="text-2xl font-bold uppercase mb-4 font-sans tracking-tighter">YESHA ENTERPRISES</h2>
           <p className="text-muted-foreground max-w-xs font-light">
@@ -66,7 +66,16 @@ export function Footer() {
             </li>
           </ul>
         </div>
-       
+         <div>
+          <h4 className="text-[10px] uppercase tracking-widest mb-6">Developers</h4>
+          <ul className="space-y-3 text-sm font-light">
+            <li>
+              <a href="https://web.buddies.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                web_buddies.dev
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
       <div className="flex flex-col md:row items-center justify-between pt-12 border-t border-border gap-4">
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
@@ -83,6 +92,9 @@ export function Footer() {
             LinkedIn
           </Link>
         </div>
+        <p className="text-[11px] text-black/50 mt-10  tracking-wider">
+          Designed and Developed by web_buddies
+        </p>
       </div>
     </footer>
   )

@@ -21,6 +21,7 @@ import {
 } from "lucide-react"
 import MaintenanceScreen from "@/components/maintenance-screen"
 import { motion, AnimatePresence } from "framer-motion"
+import { Footer } from "@/components/footer"
 
 export default function SupportPage() {
   const [maintenanceMode, setMaintenanceMode] = useState(false)
@@ -451,6 +452,7 @@ export default function SupportPage() {
           Available Monday–Saturday · 9:00 AM – 7:00 PM IST
         </motion.p>
       </motion.section>
+      <Footer />
     </main>
   )
 }

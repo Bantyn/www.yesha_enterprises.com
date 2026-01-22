@@ -488,14 +488,10 @@ export default function AdminDashboard() {
                   </span>
                 </div>
                 {systemInfo.database.status === 'connected' && (
-                  <div className="grid grid-cols-2 gap-2 text-sm mt-2">
+                  <div className="grid grid-cols-1 gap-2 text-sm mt-2">
                     <div className="flex justify-between">
                       <span className="text-neutral-600">Database:</span>
-                      <span className="font-medium">{systemInfo.database.name}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-neutral-600">Collections:</span>
-                      <span className="font-medium">{systemInfo.database.collections}</span>
+                      <span className="font-medium">{"yesha_enterprises"}</span>
                     </div>
                   </div>
                 )}
