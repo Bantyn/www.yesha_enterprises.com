@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,22 +19,42 @@ export function ProjectsFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get('category') || 'all';
+  const [categories, setCategories] = useState<{ value: string; label: string }[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories?type=project');
+        if (response.ok) {
+          const data = await response.json();
+          const dynamicCats = data.categories.map((cat: any) => ({
+            value: cat.slug,
+            label: cat.name
+          }));
+          setCategories([{ value: 'all', label: 'All Projects' }, ...dynamicCats]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleCategoryChange = (category: string) => {
     const params = new URLSearchParams(searchParams);
-    
+
     if (category === 'all') {
       params.delete('category');
     } else {
       params.set('category', category);
     }
-    
+
     // Reset page when changing category
     params.delete('page');
-    
+
     const queryString = params.toString();
     const url = queryString ? `/projects?${queryString}` : '/projects';
-    
+
     // Use replace instead of push to prevent scroll to top
     router.replace(url, { scroll: false });
   };

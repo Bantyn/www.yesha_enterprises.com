@@ -49,15 +49,18 @@ export async function PUT(request: NextRequest) {
     const { type, data } = body;
     const { companyInfo, seo } = await initializeServices();
 
+    // Remove _id from data if present to avoid MongoDB update error
+    const { _id, ...updateData } = data;
+
     if (type === 'company') {
-      const updated = await companyInfo.updateCompanyInfo(data);
+      const updated = await companyInfo.updateCompanyInfo(updateData);
       return NextResponse.json({ success: true, data: updated });
     } 
     
     if (type === 'seo') {
       // Logic for updating SEO
       // simplified for now, assuming editing home page SEO globally
-      const updated = await seo.upsertPageSEO('home', data);
+      const updated = await seo.upsertPageSEO('home', updateData);
       return NextResponse.json({ success: true, data: updated });
     }
 

@@ -20,7 +20,6 @@ import { SEOService, defaultSEOConfigs } from '@/lib/seo';
 
 export const metadata: Metadata = SEOService.generateMetadata(defaultSEOConfigs.home);
 
-// Hero Section Component
 function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
@@ -36,7 +35,7 @@ function HeroSection() {
           {/* Badge */}
           <div className="mb-8">
             <Badge variant="secondary" className="px-4 py-2 text-sm font-medium">
-              🚀 Professional Web Development Agency
+              Professional Web Development Agency
             </Badge>
           </div>
 

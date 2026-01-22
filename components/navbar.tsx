@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRef } from 'react';
 import {
   Menu,
   X,
-  Sun,
-  Moon,
   Code,
   ExternalLink,
-  ChevronDown
+  ChevronDown,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,193 +26,166 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
   {
-    name: 'Services',
-    href: '/services',
+    name: 'Pricing',
+    href: '/pricing',
     submenu: [
-      { name: 'Website Development', href: '/services/website-development' },
-      { name: 'MERN Stack Apps', href: '/services/mern-stack' },
-      { name: 'Next.js Websites', href: '/services/nextjs' },
-      { name: 'Admin Dashboards', href: '/services/dashboards' },
-      { name: 'API Development', href: '/services/api-development' },
-    ]
+      { name: 'Website Development', href: '/pricing/website-development' },
+      { name: 'MERN Stack Apps', href: '/pricing/mern-stack' },
+      { name: 'Next.js Websites', href: '/pricing/nextjs' },
+      { name: 'Admin Dashboards', href: '/pricing/dashboards' },
+      { name: 'API Development', href: '/pricing/api-development' },
+    ],
   },
   { name: 'Projects', href: '/projects' },
   { name: 'Contact', href: '/contact' },
 ];
 
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [dark, setDark] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
 
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const closeMenu = () => setIsOpen(false);
-
-  if (!mounted) return null;
-
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle('dark');
+    setDark(!dark);
+  };
+  const hasAnimated = useRef(false);
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-        ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg'
-        : 'bg-transparent'
-        }`}
+      initial={
+        hasAnimated.current
+          ? false
+          : { y: -100, opacity: 0 }
+      }
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      onAnimationComplete={() => {
+        hasAnimated.current = true;
+      }}
+      className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="relative">
-              <Code className="h-8 w-8 wb-text-primary group-hover:rotate-12 transition-transform duration-300" />
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#C645F9]/20 to-[#5E6CE7]/20 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
-              Web Buddies
-            </span>
-          </Link>
+      <div
+        className={`flex items-center justify-between px-6 h-16 rounded-full
+        backdrop-blur-xl transition-all duration-300 border border-gray-200 dark:border-white/10`}
+      >
+        {/* LOGO */}
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="relative">
+            <Code className="h-7 w-7 text-[#C645F9] group-hover:rotate-12 transition-transform" />
+            <span className="absolute -inset-1 bg-gradient-to-r from-[#C645F9]/30 to-[#5E6CE7]/30 blur rounded-full opacity-0 group-hover:opacity-100 transition" />
+          </div>
+          <span className="font-bold text-lg tracking-tight">
+            Web Buddies
+          </span>
+        </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <div key={item.name} className="relative">
-                {item.submenu ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:wb-text-primary transition-colors"
-                      >
-                        <span>{item.name}</span>
-                        <ChevronDown className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
-                      {item.submenu.map((subItem) => (
-                        <DropdownMenuItem key={subItem.name} asChild>
-                          <Link
-                            href={subItem.href}
-                            className="flex items-center space-x-3 w-full px-4 py-3 text-sm hover:wb-bg-primary/10 hover:wb-text-primary transition-all duration-200 rounded-md mx-1"
-                          >
-                            <div className="w-2 h-2 rounded-full wb-bg-primary/60"></div>
-                            <span>{subItem.name}</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className={`relative px-3 py-2 text-sm font-medium transition-colors ${pathname === item.href
-                      ? 'wb-text-primary'
-                      : 'text-gray-700 dark:text-gray-300 hover:wb-text-primary'
-                      }`}
+        {/* DESKTOP MENU */}
+        <div className="hidden md:flex items-center gap-8">
+          {navigation.map((item) => (
+            <div key={item.name} className="relative">
+              {item.submenu ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-[#C645F9] transition">
+                      {item.name}
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent
+                    align="start"
+                    className="mt-3 w-64 rounded-xl bg-white/95 dark:bg-[#140A35]
+                    backdrop-blur-xl border border-gray-200/50 dark:border-white/10 shadow-xl p-2"
                   >
-                    {item.name}
-                    {pathname === item.href && (
-                      <motion.div
-                        layoutId="navbar-indicator"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 wb-bg-primary"
-                        initial={false}
-                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                      />
-                    )}
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Right side buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            {/* CTA Button */}
-            <Button asChild className="wb-bg-primary hover:opacity-90 text-white">
-              <Link href="/contact" className="flex items-center space-x-2">
-                <span>Get Quote</span>
-                <ExternalLink className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 dark:text-gray-300"
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
-          </div>
+                    {item.submenu.map((sub) => (
+                      <DropdownMenuItem key={sub.name} asChild>
+                        <Link
+                          href={sub.href}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition
+                          ${pathname === sub.href
+                              ? 'bg-gradient-to-r from-[#C645F9] to-[#5E6CE7] text-white'
+                              : 'text-gray-700 dark:text-gray-300 hover:bg-[#C645F9]/10 hover:text-[#C645F9]'
+                            }`}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#C645F9]" />
+                          {sub.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link
+                  href={item.href}
+                  className={`text-sm font-medium transition relative
+                  ${pathname === item.href
+                      ? 'text-[#C645F9]'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-[#C645F9]'
+                    }`}
+                >
+                  {item.name}
+                  {pathname === item.href && (
+                    <motion.span
+                      layoutId="nav-indicator"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-[#C645F9] to-[#5E6CE7]"
+                    />
+                  )}
+                </Link>
+              )}
+            </div>
+          ))}
         </div>
+
+        {/* RIGHT ACTIONS */}
+        <div className="hidden md:flex items-center gap-3">
+
+
+          <Button asChild className="bg-gradient-to-r from-[#C645F9] to-[#5E6CE7] text-white rounded-full px-5">
+            <Link href="/contact" className="flex items-center gap-2">
+              Get Quote <ExternalLink className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+
+        {/* MOBILE */}
+        <button
+          className="md:hidden"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <X /> : <Menu />}
+        </button>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden mt-3 rounded-2xl bg-white dark:bg-[#0D0425]
+            border border-gray-200 dark:border-white/10 shadow-xl overflow-hidden"
           >
-            <div className="px-4 py-4 space-y-2">
+            <div className="p-4 space-y-2">
               {navigation.map((item) => (
-                <div key={item.name}>
-                  {item.submenu ? (
-                    <div className="space-y-2">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white px-3 py-2">
-                        {item.name}
-                      </div>
-                      {item.submenu.map((subItem) => (
-                        <Link
-                          key={subItem.name}
-                          href={subItem.href}
-                          onClick={closeMenu}
-                          className="block px-6 py-3 text-sm text-gray-600 dark:text-gray-400 hover:wb-text-primary hover:wb-bg-primary/10 rounded-md transition-all duration-200 ml-4"
-                        >
-                          <div className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 rounded-full wb-bg-primary/60"></div>
-                            <span>{subItem.name}</span>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      onClick={closeMenu}
-                      className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${pathname === item.href
-                        ? 'wb-text-primary wb-bg-primary/10'
-                        : 'text-gray-700 dark:text-gray-300 hover:wb-text-primary hover:bg-gray-50 dark:hover:bg-gray-800'
-                        }`}
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-                </div>
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className="block px-4 py-3 rounded-lg text-sm
+                  text-gray-700 dark:text-gray-300
+                  hover:bg-[#C645F9]/10 hover:text-[#C645F9]"
+                >
+                  {item.name}
+                </Link>
               ))}
 
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                <Button asChild className="w-full wb-bg-primary hover:opacity-90 text-white">
-                  <Link href="/contact" onClick={closeMenu}>
-                    Get Free Quote
-                  </Link>
-                </Button>
-              </div>
+              <Button asChild className="w-full mt-3 bg-gradient-to-r from-[#C645F9] to-[#5E6CE7] text-white">
+                <Link href="/contact">Get Free Quote</Link>
+              </Button>
             </div>
           </motion.div>
         )}

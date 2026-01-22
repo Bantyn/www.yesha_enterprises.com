@@ -29,12 +29,10 @@ export default async function RootLayout({
 }) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
-  // Maintenance Check
   try {
     const headersList = await headers();
     const pathname = headersList.get('x-pathname') || '';
 
-    // Only check if not already on allowed paths
     if (
       !pathname.startsWith('/admin') &&
       !pathname.startsWith('/api') &&
@@ -49,10 +47,6 @@ export default async function RootLayout({
       }
     }
   } catch (error) {
-    // Fallback or log error, but don't crash the site if DB fails?
-    // If DB fails, we probably can't serve content anyway, but let's be safe.
-    // console.error("Maintenance check failed", error);
-    // If it was a redirect error, rethrow
     if ((error as any).digest?.startsWith('NEXT_REDIRECT')) {
       throw error;
     }

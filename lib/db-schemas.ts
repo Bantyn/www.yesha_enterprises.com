@@ -10,7 +10,7 @@ export const ProjectSchema = z.object({
   images: z.array(z.string()).min(1, 'At least one image is required'),
   liveUrl: z.string().url().optional(),
   githubUrl: z.string().url().optional(),
-  category: z.enum(['website', 'web-app', 'mern-stack', 'nextjs', 'dashboard', 'api']),
+  category: z.string().min(1, 'Category is required'),
   featured: z.boolean().default(false),
   status: z.enum(['completed', 'in-progress', 'planned']).default('completed'),
   clientName: z.string().optional(),
@@ -37,6 +37,18 @@ export const ServiceSchema = z.object({
   featured: z.boolean().default(false),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
+  createdAt: z.date().default(() => new Date()),
+  updatedAt: z.date().default(() => new Date()),
+});
+
+// Category Schema
+export const CategorySchema = z.object({
+  _id: z.string().optional(),
+  name: z.string().min(1, 'Name is required'),
+  slug: z.string().min(1, 'Slug is required'),
+  description: z.string().optional(),
+  type: z.enum(['project', 'service']).default('project'),
+  icon: z.string().optional(),
   createdAt: z.date().default(() => new Date()),
   updatedAt: z.date().default(() => new Date()),
 });
@@ -114,6 +126,7 @@ export const CompanyInfoSchema = z.object({
 // Type exports
 export type Project = z.infer<typeof ProjectSchema>;
 export type Service = z.infer<typeof ServiceSchema>;
+export type Category = z.infer<typeof CategorySchema>;
 export type Contact = z.infer<typeof ContactSchema>;
 export type AdminUser = z.infer<typeof AdminUserSchema>;
 export type SEOSettings = z.infer<typeof SEOSettingsSchema>;

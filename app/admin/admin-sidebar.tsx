@@ -3,21 +3,23 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  FolderOpen, 
-  Settings, 
-  Users, 
-  Mail, 
+import {
+  LayoutDashboard,
+  FolderOpen,
+  Settings,
+  Users,
+  Mail,
   Code,
   Menu,
-  X
+  X,
+  Tag
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Projects', href: '/admin/projects', icon: FolderOpen },
+  { name: 'Categories', href: '/admin/categories', icon: Tag },
   { name: 'Services', href: '/admin/services', icon: Code },
   { name: 'Contacts', href: '/admin/contacts', icon: Mail },
   { name: 'Users', href: '/admin/users', icon: Users },
@@ -91,18 +93,16 @@ function SidebarContent({ pathname }: { pathname: string }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
-                  isActive
+                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${isActive
                     ? 'bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
-                }`}
+                  }`}
               >
                 <item.icon
-                  className={`mr-3 h-5 w-5 ${
-                    isActive
+                  className={`mr-3 h-5 w-5 ${isActive
                       ? 'text-blue-500 dark:text-blue-400'
                       : 'text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300'
-                  }`}
+                    }`}
                 />
                 {item.name}
               </Link>

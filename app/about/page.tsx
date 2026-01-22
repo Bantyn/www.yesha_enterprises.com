@@ -4,10 +4,10 @@ import { Footer } from '@/components/footer';
 import { SEOService, defaultSEOConfigs } from '@/lib/seo';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  Users, 
-  Award, 
-  Clock, 
+import {
+  Users,
+  Award,
+  Clock,
   Target,
   Heart,
   Zap,
@@ -51,19 +51,24 @@ export default function AboutPage() {
   return (
     <main>
       <Navbar />
-      
       {/* Hero Section */}
-      <section className="pt-24 pb-12 wb-gradient-soft">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-[#0D0425] dark:via-gray-900 dark:to-[#0D0425] overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse"></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-4">
+            <Badge variant="secondary" className="px-4 py-2 text-sm font-medium mb-6">
               🚀 About Web Buddies
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               About Web Buddies
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              We are passionate web developers dedicated to creating exceptional digital experiences 
+              We are passionate web developers dedicated to creating exceptional digital experiences
               that help businesses thrive in the modern world.
             </p>
           </div>
@@ -99,21 +104,21 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-gray-600 dark:text-gray-300">
                 <p>
-                  Founded by <strong className="wb-text-primary">Banty Patel</strong>, Web Buddies started with a simple mission: 
+                  Founded by <strong className="wb-text-primary">Banty Patel</strong>, Web Buddies started with a simple mission:
                   to help businesses establish a strong digital presence through innovative web solutions.
                 </p>
                 <p>
-                  Based in <strong>Sagrampura, Surat</strong>, we have grown from a small startup to a trusted 
-                  web development agency, serving clients across India and beyond. Our expertise spans from 
+                  Based in <strong>Sagrampura, Surat</strong>, we have grown from a small startup to a trusted
+                  web development agency, serving clients across India and beyond. Our expertise spans from
                   simple websites to complex web applications.
                 </p>
                 <p>
-                  We believe in building long-term partnerships with our clients, providing ongoing support 
+                  We believe in building long-term partnerships with our clients, providing ongoing support
                   and maintenance to ensure their digital success continues to grow.
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-gradient-to-r from-[#C645F9]/10 to-[#5E6CE7]/10 rounded-lg p-8">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                 Contact Information
@@ -131,7 +136,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Values */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-800">
+      <section className="py-20 bg-gray-50 dark:bg-gray-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -144,17 +149,17 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {values.map((value, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card key={index} className="hover:shadow-lg transition-all duration-300 border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900/50">
                 <CardHeader>
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-gradient-to-r from-[#C645F9]/10 to-[#5E6CE7]/10 rounded-lg">
+                    <div className="p-3 bg-gradient-to-r from-[#C645F9]/10 to-[#5E6CE7]/10 rounded-xl">
                       <value.icon className="h-6 w-6 wb-text-primary" />
                     </div>
                     <CardTitle className="text-xl">{value.title}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-base">
+                  <CardDescription className="text-base text-gray-600 dark:text-gray-400">
                     {value.description}
                   </CardDescription>
                 </CardContent>

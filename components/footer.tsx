@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { 
-  Code, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Linkedin, 
-  Twitter, 
-  Github, 
+import {
+  Code,
+  Mail,
+  Phone,
+  MapPin,
+  Linkedin,
+  Twitter,
+  Github,
   Instagram,
   ExternalLink,
   Clock,
@@ -44,17 +44,23 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-white">
-      {/* Stats Section */}
-      <div className="border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+    <footer className="relative bg-[#0D0425] text-white overflow-hidden">
+      {/* Soft background glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#C645F9]/20 blur-[140px]" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#5E6CE7]/20 blur-[140px]" />
+      </div>
+
+      {/* Stats */}
+      <div className="relative border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="flex justify-center mb-3">
-                  <stat.icon className="h-8 w-8 text-blue-400" />
+                <div className="flex justify-center mb-4">
+                  <stat.icon className="h-9 w-9 text-[#C645F9]" />
                 </div>
-                <div className="text-2xl font-bold text-white mb-1">
+                <div className="text-3xl font-bold mb-1">
                   {stat.value}
                 </div>
                 <div className="text-sm text-gray-400">
@@ -66,64 +72,61 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
+      {/* Main Content */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          {/* Brand */}
           <div className="lg:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <Code className="h-8 w-8 text-blue-400" />
-              <span className="text-xl font-bold">Web Buddies</span>
+            <div className="flex items-center space-x-3 mb-5">
+              <div className="p-2 rounded-lg bg-gradient-to-r from-[#C645F9] to-[#5E6CE7]">
+                <Code className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-2xl font-bold tracking-tight">
+                Web Buddies
+              </span>
             </div>
-            <p className="text-gray-400 mb-6 max-w-md">
-              We're a professional web development agency specializing in modern websites 
-              and scalable web applications. From MERN stack to Next.js, we bring your 
-              digital vision to life.
+
+            <p className="text-gray-400 max-w-md mb-8">
+              We build modern, high-performance websites and scalable web applications.
+              From MERN stack to Next.js, we help businesses grow digitally.
             </p>
-            
-            {/* Contact Info */}
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3 text-gray-400">
-                <Mail className="h-5 w-5 wb-text-primary" />
-                <a 
-                  href="mailto:patelbanty1260@gmail.com" 
-                  className="hover:text-white transition-colors"
-                >
+
+            <div className="space-y-4 text-sm">
+              <div className="flex items-center gap-3 text-gray-400">
+                <Mail className="h-4 w-4 text-[#C645F9]" />
+                <a href="mailto:patelbanty1260@gmail.com" className="hover:text-white">
                   patelbanty1260@gmail.com
                 </a>
               </div>
-              <div className="flex items-center space-x-3 text-gray-400">
-                <Phone className="h-5 w-5 wb-text-primary" />
-                <a 
-                  href="tel:+919016576612" 
-                  className="hover:text-white transition-colors"
-                >
+              <div className="flex items-center gap-3 text-gray-400">
+                <Phone className="h-4 w-4 text-[#C645F9]" />
+                <a href="tel:+919016576612" className="hover:text-white">
                   +91 9016576612
                 </a>
               </div>
-              <div className="flex items-center space-x-3 text-gray-400">
-                <MapPin className="h-5 w-5 wb-text-primary" />
-                <span>Sagrampura, Surat, 395002</span>
+              <div className="flex items-center gap-3 text-gray-400">
+                <MapPin className="h-4 w-4 text-[#C645F9]" />
+                <span>Sagrampura, Surat – 395002</span>
               </div>
-              <div className="flex items-center space-x-3 text-gray-400">
-                <Clock className="h-5 w-5 wb-text-primary" />
-                <span>Mon-Fri 9AM-6PM IST</span>
+              <div className="flex items-center gap-3 text-gray-400">
+                <Clock className="h-4 w-4 text-[#C645F9]" />
+                <span>Mon – Fri, 9AM – 6PM IST</span>
               </div>
             </div>
           </div>
 
           {/* Services */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Services</h3>
+            <h3 className="text-lg font-semibold mb-5">Services</h3>
             <ul className="space-y-3">
               {services.map((service) => (
                 <li key={service.name}>
                   <Link
                     href={service.href}
-                    className="text-gray-400 hover:text-white transition-colors flex items-center group"
+                    className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
                   >
                     <span>{service.name}</span>
-                    <ExternalLink className="h-3 w-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Link>
                 </li>
               ))}
@@ -132,100 +135,65 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Company</h3>
-            <ul className="space-y-3">
+            <h3 className="text-lg font-semibold mb-5">Company</h3>
+            <ul className="space-y-3 mb-6">
               {company.map((item) => (
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-gray-400 hover:text-white transition-colors flex items-center group"
+                    className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
                   >
                     <span>{item.name}</span>
-                    <ExternalLink className="h-3 w-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Link>
                 </li>
               ))}
             </ul>
 
-            {/* Social Links */}
-            <div className="mt-6">
-              <h4 className="text-sm font-semibold mb-3">Follow Us</h4>
-              <div className="flex space-x-3">
+            {/* Socials */}
+            <div className="flex gap-4">
+              {[Linkedin, Twitter, Github, Instagram].map((Icon, i) => (
                 <a
-                  href="https://linkedin.com/company/webbuddies"
+                  key={i}
+                  href="#"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
+                  className="p-2 rounded-full bg-white/5 hover:bg-gradient-to-r hover:from-[#C645F9] hover:to-[#5E6CE7] transition-all"
                 >
-                  <Linkedin className="h-5 w-5" />
+                  <Icon className="h-4 w-4" />
                 </a>
-                <a
-                  href="https://twitter.com/webbuddies"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                >
-                  <Twitter className="h-5 w-5" />
-                </a>
-                <a
-                  href="https://github.com/webbuddies"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                >
-                  <Github className="h-5 w-5" />
-                </a>
-                <a
-                  href="https://instagram.com/webbuddies"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors"
-                >
-                  <Instagram className="h-5 w-5" />
-                </a>
-              </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className="mt-12 p-6 wb-gradient-primary rounded-lg">
-          <div className="text-center">
-            <h3 className="text-xl font-bold mb-2">Ready to Start Your Project?</h3>
-            <p className="text-white/80 mb-4">
-              Get a free consultation and quote for your web development needs.
-            </p>
-            <Button 
-              asChild 
-              variant="secondary" 
-              className="bg-white text-[#C645F9] hover:bg-gray-100"
-            >
-              <Link href="/contact">
-                Get Free Quote
-              </Link>
-            </Button>
-          </div>
+        {/* CTA */}
+        <div className="mt-16 rounded-2xl bg-gradient-to-r from-[#C645F9] to-[#5E6CE7] p-8 text-center shadow-xl">
+          <h3 className="text-2xl font-bold mb-3">
+            Ready to Start Your Project?
+          </h3>
+          <p className="text-white/80 mb-6">
+            Get a free consultation and let’s build something amazing together.
+          </p>
+          <Button
+            asChild
+            className="bg-white text-[#C645F9] font-semibold hover:bg-gray-100"
+          >
+            <Link href="/contact">Get Free Quote</Link>
+          </Button>
         </div>
 
-        <Separator className="my-8 bg-gray-800" />
+        <Separator className="my-10 bg-white/10" />
 
-        {/* Bottom Bar */}
+        {/* Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-          <div className="mb-4 md:mb-0">
-            <p>
-              © {currentYear} Web Buddies. All rights reserved. Built with ❤️ using Next.js
-            </p>
-          </div>
-          <div className="flex space-x-6">
-            <Link href="/privacy" className="hover:text-white transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-white transition-colors">
-              Terms of Service
-            </Link>
-            <Link href="/sitemap.xml" className="hover:text-white transition-colors">
-              Sitemap
-            </Link>
+          <p className="mb-4 md:mb-0">
+            © {currentYear} Web Buddies. Built with ❤️ using Next.js
+          </p>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="hover:text-white">Privacy</Link>
+            <Link href="/terms" className="hover:text-white">Terms</Link>
+            <Link href="/sitemap.xml" className="hover:text-white">Sitemap</Link>
           </div>
         </div>
       </div>

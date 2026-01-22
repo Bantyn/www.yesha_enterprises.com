@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ExternalLink, Github, Calendar, Tag } from 'lucide-react';
+import { ExternalLink, Github, Calendar, Tag, Eye } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,18 +23,18 @@ export function ProjectsGrid() {
         setLoading(true);
         const category = searchParams.get('category') || 'all';
         const page = searchParams.get('page') || '1';
-        
+
         const params = new URLSearchParams({
           page,
           limit: '12',
         });
-        
+
         if (category !== 'all') {
           params.set('category', category);
         }
 
         const response = await fetch(`/api/projects?${params}`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch projects');
         }
@@ -153,7 +153,7 @@ export function ProjectsGrid() {
                 <div className="flex items-center space-x-1">
                   <Calendar className="h-4 w-4" />
                   <span>
-                    {project.completedDate 
+                    {project.completedDate
                       ? new Date(project.completedDate).getFullYear()
                       : 'Ongoing'
                     }
@@ -167,12 +167,13 @@ export function ProjectsGrid() {
 
               {/* Action Buttons */}
               <div className="flex space-x-2">
-                <Button asChild size="sm" className="flex-1">
-                  <Link href={`/projects/${project.slug}`}>
-                    View Details
-                  </Link>
+                <Button asChild size="sm" className="flex-1 h-11 mt-3">
+                  <a href={`https://${project.slug}`} target="_blank" rel="noopener noreferrer">
+                    View Demo
+                    <Eye className="h-4 w-4 ml-1" />
+                  </a>
                 </Button>
-                
+
                 {project.liveUrl && (
                   <Button size="sm" variant="outline" asChild>
                     <a
@@ -185,7 +186,7 @@ export function ProjectsGrid() {
                     </a>
                   </Button>
                 )}
-                
+
                 {project.githubUrl && (
                   <Button size="sm" variant="outline" asChild>
                     <a

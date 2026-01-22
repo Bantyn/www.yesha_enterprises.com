@@ -109,160 +109,162 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Name and Email */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="name">Name *</Label>
-          <Input
-            id="name"
-            {...register('name')}
-            placeholder="Your full name"
-            className="mt-1"
-          />
-          {errors.name && (
-            <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>
-          )}
-        </div>
-        
-        <div>
-          <Label htmlFor="email">Email *</Label>
-          <Input
-            id="email"
-            type="email"
-            {...register('email')}
-            placeholder="your@email.com"
-            className="mt-1"
-          />
-          {errors.email && (
-            <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>
-          )}
-        </div>
-      </div>
+   <form
+  onSubmit={handleSubmit(onSubmit)}
+  className="relative space-y-8 rounded-2xl border border-gray-200/60
+             dark:border-white/10 bg-white/70 dark:bg-[#0D0425]/70
+             backdrop-blur-xl p-6 md:p-8 shadow-xl"
+>
+  {/* Header */}
+  <div className="text-center">
+    <h2 className="text-2xl md:text-3xl font-bold mb-2">
+      Let’s Build Something Great 
+    </h2>
+    <p className="text-gray-600 dark:text-gray-400">
+      Tell us about your project and we’ll get back within 24 hours.
+    </p>
+  </div>
 
-      {/* Phone and Company */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="phone">Phone</Label>
-          <Input
-            id="phone"
-            type="tel"
-            {...register('phone')}
-            placeholder="+1 (555) 123-4567"
-            className="mt-1"
-          />
-        </div>
-        
-        <div>
-          <Label htmlFor="company">Company</Label>
-          <Input
-            id="company"
-            {...register('company')}
-            placeholder="Your company name"
-            className="mt-1"
-          />
-        </div>
-      </div>
+  {/* Name & Email */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div className="space-y-1">
+      <Label>Name *</Label>
+      <Input
+        {...register('name')}
+        placeholder="Your full name"
+        className="h-11 rounded-lg border-gray-300/70 dark:border-white/10
+                   focus:ring-2 focus:ring-[#C645F9]/40"
+      />
+      {errors.name && (
+        <p className="text-sm text-red-500">{errors.name.message}</p>
+      )}
+    </div>
 
-      {/* Project Type */}
-      <div>
-        <Label htmlFor="projectType">Project Type *</Label>
-        <Select onValueChange={(value) => setValue('projectType', value as any)}>
-          <SelectTrigger className="mt-1">
-            <SelectValue placeholder="Select project type" />
-          </SelectTrigger>
-          <SelectContent>
-            {projectTypes.map((type) => (
-              <SelectItem key={type.value} value={type.value}>
-                {type.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.projectType && (
-          <p className="text-sm text-red-600 mt-1">{errors.projectType.message}</p>
-        )}
-      </div>
+    <div className="space-y-1">
+      <Label>Email *</Label>
+      <Input
+        type="email"
+        {...register('email')}
+        placeholder="your@email.com"
+        className="h-11 rounded-lg border-gray-300/70 dark:border-white/10
+                   focus:ring-2 focus:ring-[#5E6CE7]/40"
+      />
+      {errors.email && (
+        <p className="text-sm text-red-500">{errors.email.message}</p>
+      )}
+    </div>
+  </div>
 
-      {/* Budget and Timeline */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="budget">Budget Range *</Label>
-          <Select onValueChange={(value) => setValue('budget', value as any)}>
-            <SelectTrigger className="mt-1">
-              <SelectValue placeholder="Select budget range" />
-            </SelectTrigger>
-            <SelectContent>
-              {budgetRanges.map((budget) => (
-                <SelectItem key={budget.value} value={budget.value}>
-                  {budget.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.budget && (
-            <p className="text-sm text-red-600 mt-1">{errors.budget.message}</p>
-          )}
-        </div>
-        
-        <div>
-          <Label htmlFor="timeline">Timeline *</Label>
-          <Select onValueChange={(value) => setValue('timeline', value as any)}>
-            <SelectTrigger className="mt-1">
-              <SelectValue placeholder="Select timeline" />
-            </SelectTrigger>
-            <SelectContent>
-              {timelines.map((timeline) => (
-                <SelectItem key={timeline.value} value={timeline.value}>
-                  {timeline.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.timeline && (
-            <p className="text-sm text-red-600 mt-1">{errors.timeline.message}</p>
-          )}
-        </div>
-      </div>
+  {/* Phone & Company */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div className="space-y-1">
+      <Label>Phone</Label>
+      <Input
+        {...register('phone')}
+        placeholder="+91 98765 43210"
+        className="h-11 rounded-lg"
+      />
+    </div>
 
-      {/* Message */}
-      <div>
-        <Label htmlFor="message">Project Details *</Label>
-        <Textarea
-          id="message"
-          {...register('message')}
-          placeholder="Tell us about your project requirements, goals, and any specific features you need..."
-          rows={5}
-          className="mt-1"
-        />
-        {errors.message && (
-          <p className="text-sm text-red-600 mt-1">{errors.message.message}</p>
-        )}
-      </div>
+    <div className="space-y-1">
+      <Label>Company</Label>
+      <Input
+        {...register('company')}
+        placeholder="Company name"
+        className="h-11 rounded-lg"
+      />
+    </div>
+  </div>
 
-      {/* Submit Button */}
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-        size="lg"
-      >
-        {isSubmitting ? (
-          <>
-            <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-            Sending Message...
-          </>
-        ) : (
-          <>
-            <Send className="h-5 w-5 mr-2" />
-            Send Message
-          </>
-        )}
-      </Button>
+  {/* Project Type */}
+  <div className="space-y-1">
+    <Label>Project Type *</Label>
+    <Select onValueChange={(v) => setValue('projectType', v as any)}>
+      <SelectTrigger className="h-11 rounded-lg">
+        <SelectValue placeholder="Select project type" />
+      </SelectTrigger>
+      <SelectContent>
+        {projectTypes.map((type) => (
+          <SelectItem key={type.value} value={type.value}>
+            {type.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
 
-      <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-        We'll respond within 24 hours with a detailed proposal and next steps.
-      </p>
-    </form>
+  {/* Budget & Timeline */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div className="space-y-1">
+      <Label>Budget *</Label>
+      <Select onValueChange={(v) => setValue('budget', v as any)}>
+        <SelectTrigger className="h-11 rounded-lg">
+          <SelectValue placeholder="Budget range" />
+        </SelectTrigger>
+        <SelectContent>
+          {budgetRanges.map((b) => (
+            <SelectItem key={b.value} value={b.value}>
+              {b.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+
+    <div className="space-y-1">
+      <Label>Timeline *</Label>
+      <Select onValueChange={(v) => setValue('timeline', v as any)}>
+        <SelectTrigger className="h-11 rounded-lg">
+          <SelectValue placeholder="Project timeline" />
+        </SelectTrigger>
+        <SelectContent>
+          {timelines.map((t) => (
+            <SelectItem key={t.value} value={t.value}>
+              {t.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  </div>
+
+  {/* Message */}
+  <div className="space-y-1">
+    <Label>Project Details *</Label>
+    <Textarea
+      {...register('message')}
+      rows={5}
+      placeholder="Tell us about your goals, features, and expectations…"
+      className="rounded-xl resize-none focus:ring-2 focus:ring-[#C645F9]/30"
+    />
+  </div>
+
+  {/* Submit */}
+  <Button
+    type="submit"
+    disabled={isSubmitting}
+    size="lg"
+    className="w-full h-12 text-white font-semibold
+               bg-gradient-to-r from-[#C645F9] to-[#5E6CE7]
+               hover:opacity-90 transition-all shadow-lg"
+  >
+    {isSubmitting ? (
+      <>
+        <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+        Sending...
+      </>
+    ) : (
+      <>
+        <Send className="h-5 w-5 mr-2" />
+        Send Request
+      </>
+    )}
+  </Button>
+
+  <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+    🔒 Your information is safe. We never share your data.
+  </p>
+</form>
+
   );
 }

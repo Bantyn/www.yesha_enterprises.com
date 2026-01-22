@@ -2,6 +2,7 @@ import { MongoClient, Db, Collection, ObjectId } from 'mongodb';
 import { 
   Project, 
   Service, 
+  Category,
   Contact, 
   AdminUser, 
   SEOSettings, 
@@ -85,9 +86,13 @@ export class DatabaseService<T> {
 
   async update(id: string, data: Partial<T>): Promise<T | null> {
     const collection = await this.getCollection();
+    
+    // Strip immutable fields if they exist in the payload
+    const { _id, createdAt, ...updateData } = data as any;
+    
     const result = await collection.findOneAndUpdate(
       { _id: new ObjectId(id) },
-      { $set: { ...data, updatedAt: new Date() } },
+      { $set: { ...updateData, updatedAt: new Date() } },
       { returnDocument: 'after' }
     );
     return result as T | null;
@@ -248,6 +253,20 @@ export class CompanyInfoService extends DatabaseService<CompanyInfo> {
   }
 }
 
+export class CategoryService extends DatabaseService<Category> {
+  constructor() {
+    super('categories');
+  }
+
+  async findByType(type: 'project' | 'service'): Promise<Category[]> {
+    return await this.findAll({ type }, { sort: { name: 1 } });
+  }
+
+  async findBySlug(slug: string): Promise<Category | null> {
+    return await this.findOne({ slug });
+  }
+}
+
 // Initialize services
 export async function initializeServices() {
   await connectToDatabase();
@@ -255,6 +274,7 @@ export async function initializeServices() {
   return {
     projects: new ProjectService(),
     services: new ServiceService(),
+    categories: new CategoryService(),
     contacts: new ContactService(),
     adminUsers: new AdminUserService(),
     seo: new SEOService(),
