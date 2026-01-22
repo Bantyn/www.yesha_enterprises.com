@@ -8,6 +8,11 @@ import {
   CompanyInfo 
 } from './db-schemas';
 
+// Add global declaration for TypeScript
+declare global {
+  var _mongoClientPromise: Promise<MongoClient> | undefined;
+}
+
 let client: MongoClient;
 let db: Db;
 
@@ -23,10 +28,21 @@ export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db
     throw new Error('Please define the MONGODB_URI environment variable');
   }
 
-  client = new MongoClient(uri);
-  await client.connect();
-  db = client.db(dbName);
+  if (process.env.NODE_ENV === 'development') {
+    // In development mode, use a global variable so that the value
+    // is preserved across module reloads caused by HMR (Hot Module Replacement).
+    if (!global._mongoClientPromise) {
+      client = new MongoClient(uri);
+      global._mongoClientPromise = client.connect();
+    }
+    client = await global._mongoClientPromise;
+  } else {
+    // In production mode, it's best to not use a global variable.
+    client = new MongoClient(uri);
+    await client.connect();
+  }
 
+  db = client.db(dbName);
   return { client, db };
 }
 
@@ -38,7 +54,7 @@ export class DatabaseService<T> {
     this.collectionName = collectionName;
   }
 
-  private async getCollection(): Promise<Collection> {
+  protected async getCollection(): Promise<Collection> {
     await connectToDatabase();
     return db.collection(this.collectionName);
   }
@@ -145,6 +161,37 @@ export class ContactService extends DatabaseService<Contact> {
     ]);
 
     return { total, new: newCount, inDiscussion, closed };
+  }
+
+  async getMonthlyStats(): Promise<{ name: string; total: number }[]> {
+    const collection = await this.getCollection();
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+    const result = await collection.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: sixMonthsAgo }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1 } }
+    ]).toArray();
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    return result.map((item: any) => ({
+      name: `${months[item._id.month - 1]}`,
+      total: item.count
+    }));
   }
 }
 

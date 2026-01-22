@@ -107,6 +107,8 @@ export const CompanyInfoSchema = z.object({
   projectsCompleted: z.number().default(50),
   clientsSatisfied: z.number().default(40),
   updatedAt: z.date().default(() => new Date()),
+  maintenanceMode: z.boolean().default(false),
+  systemVersion: z.string().default('1.0.0'),
 });
 
 // Type exports

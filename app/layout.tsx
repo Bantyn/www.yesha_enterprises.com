@@ -5,6 +5,9 @@ import { ThemeProvider } from 'next-themes';
 import { Toaster } from 'react-hot-toast';
 import { Analytics } from '@vercel/analytics/react';
 import { SEOService, defaultSEOConfigs } from '@/lib/seo';
+import { initializeServices } from '@/lib/db-utils'; // Import DB
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -20,12 +23,41 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
+
+  // Maintenance Check
+  try {
+    const headersList = await headers();
+    const pathname = headersList.get('x-pathname') || '';
+
+    // Only check if not already on allowed paths
+    if (
+      !pathname.startsWith('/admin') &&
+      !pathname.startsWith('/api') &&
+      !pathname.startsWith('/_next') &&
+      pathname !== '/maintenance'
+    ) {
+      const { companyInfo } = await initializeServices();
+      const info = await companyInfo.getCompanyInfo();
+
+      if (info?.maintenanceMode) {
+        redirect('/maintenance');
+      }
+    }
+  } catch (error) {
+    // Fallback or log error, but don't crash the site if DB fails?
+    // If DB fails, we probably can't serve content anyway, but let's be safe.
+    // console.error("Maintenance check failed", error);
+    // If it was a redirect error, rethrow
+    if ((error as any).digest?.startsWith('NEXT_REDIRECT')) {
+      throw error;
+    }
+  }
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -98,7 +130,7 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          enableSystem
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}

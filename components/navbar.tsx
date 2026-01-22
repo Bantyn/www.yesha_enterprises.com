@@ -4,15 +4,14 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from 'next-themes';
-import { 
-  Menu, 
-  X, 
-  Sun, 
-  Moon, 
-  Code, 
+import {
+  Menu,
+  X,
+  Sun,
+  Moon,
+  Code,
   ExternalLink,
-  ChevronDown 
+  ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,8 +24,8 @@ import {
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
-  { 
-    name: 'Services', 
+  {
+    name: 'Services',
     href: '/services',
     submenu: [
       { name: 'Website Development', href: '/services/website-development' },
@@ -44,12 +43,11 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
@@ -66,11 +64,10 @@ export function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg' 
-          : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg'
+        : 'bg-transparent'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -117,11 +114,10 @@ export function Navbar() {
                 ) : (
                   <Link
                     href={item.href}
-                    className={`relative px-3 py-2 text-sm font-medium transition-colors ${
-                      pathname === item.href
-                        ? 'wb-text-primary'
-                        : 'text-gray-700 dark:text-gray-300 hover:wb-text-primary'
-                    }`}
+                    className={`relative px-3 py-2 text-sm font-medium transition-colors ${pathname === item.href
+                      ? 'wb-text-primary'
+                      : 'text-gray-700 dark:text-gray-300 hover:wb-text-primary'
+                      }`}
                   >
                     {item.name}
                     {pathname === item.href && (
@@ -140,20 +136,6 @@ export function Navbar() {
 
           {/* Right side buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Theme toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="text-gray-700 dark:text-gray-300"
-            >
-              {theme === 'dark' ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
-            </Button>
-
             {/* CTA Button */}
             <Button asChild className="wb-bg-primary hover:opacity-90 text-white">
               <Link href="/contact" className="flex items-center space-x-2">
@@ -165,19 +147,6 @@ export function Navbar() {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="text-gray-700 dark:text-gray-300"
-            >
-              {theme === 'dark' ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
-            </Button>
-            
             <Button
               variant="ghost"
               size="sm"
@@ -225,18 +194,17 @@ export function Navbar() {
                     <Link
                       href={item.href}
                       onClick={closeMenu}
-                      className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                        pathname === item.href
-                          ? 'wb-text-primary wb-bg-primary/10'
-                          : 'text-gray-700 dark:text-gray-300 hover:wb-text-primary hover:bg-gray-50 dark:hover:bg-gray-800'
-                      }`}
+                      className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${pathname === item.href
+                        ? 'wb-text-primary wb-bg-primary/10'
+                        : 'text-gray-700 dark:text-gray-300 hover:wb-text-primary hover:bg-gray-50 dark:hover:bg-gray-800'
+                        }`}
                     >
                       {item.name}
                     </Link>
                   )}
                 </div>
               ))}
-              
+
               <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                 <Button asChild className="w-full wb-bg-primary hover:opacity-90 text-white">
                   <Link href="/contact" onClick={closeMenu}>

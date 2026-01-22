@@ -1,33 +1,134 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAdmin } from '../admin-provider';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { 
+import { Switch } from '@/components/ui/switch';
+import {
   Settings,
   Mail,
   Phone,
   MapPin,
   Globe,
-  Save
+  Save,
+  ShieldAlert,
+  Loader2
 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 export default function AdminSettingsPage() {
   const { user, loading } = useAdmin();
   const router = useRouter();
+  const [saving, setSaving] = useState(false);
+  const [initLoading, setInitLoading] = useState(true);
+
+  const [companyInfo, setCompanyInfo] = useState({
+    name: '',
+    ownerName: '', // This might not be in schema, handling safely
+    email: '',
+    phone: '',
+    address: '',
+    maintenanceMode: false
+  });
+
+  const [seoSettings, setSeoSettings] = useState({
+    siteTitle: '',
+    siteDescription: '',
+    keywords: ''
+  });
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/admin/login');
       return;
     }
+
+    if (user) {
+      fetchSettings();
+    }
   }, [user, loading, router]);
 
-  if (loading || !user) {
+  const fetchSettings = async () => {
+    try {
+      const response = await fetch('/api/settings');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.companyInfo) {
+          setCompanyInfo(prev => ({ ...prev, ...data.companyInfo }));
+        }
+        if (data.seo) {
+          setSeoSettings({
+            siteTitle: data.seo.title || '',
+            siteDescription: data.seo.description || '',
+            keywords: data.seo.keywords ? data.seo.keywords.join(', ') : ''
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch settings:', error);
+      toast.error('Failed to load settings');
+    } finally {
+      setInitLoading(false);
+    }
+  };
+
+  const handleCompanyUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const response = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'company',
+          data: companyInfo
+        })
+      });
+
+      if (response.ok) {
+        toast.success('Company settings updated!');
+      } else {
+        throw new Error('Update failed');
+      }
+    } catch (error) {
+      toast.error('Failed to update settings');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleMaintenanceToggle = async (checked: boolean) => {
+    // Optimistic update
+    setCompanyInfo(prev => ({ ...prev, maintenanceMode: checked }));
+
+    try {
+      const response = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'company',
+          data: { ...companyInfo, maintenanceMode: checked }
+        })
+      });
+
+      if (!response.ok) {
+        // Revert on failure
+        setCompanyInfo(prev => ({ ...prev, maintenanceMode: !checked }));
+        toast.error('Failed to update maintenance mode');
+      } else {
+        toast.success(`Maintenance mode ${checked ? 'enabled' : 'disabled'}`);
+      }
+    } catch (error) {
+      setCompanyInfo(prev => ({ ...prev, maintenanceMode: !checked }));
+      toast.error('Error updating maintenance mode');
+    }
+  };
+
+  if (loading || !user || initLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -60,104 +161,109 @@ export default function AdminSettingsPage() {
               Update your company details and contact information
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="companyName">Company Name</Label>
-              <Input id="companyName" defaultValue="Web Buddies" />
-            </div>
-            <div>
-              <Label htmlFor="ownerName">Owner Name</Label>
-              <Input id="ownerName" defaultValue="Banty Patel" />
-            </div>
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-gray-500" />
-                <Input id="email" defaultValue="patelbanty1260@gmail.com" />
+          <CardContent>
+            <form onSubmit={handleCompanyUpdate} className="space-y-4">
+              <div>
+                <Label htmlFor="companyName">Company Name</Label>
+                <Input
+                  id="companyName"
+                  value={companyInfo.name || ''}
+                  onChange={(e) => setCompanyInfo({ ...companyInfo, name: e.target.value })}
+                />
               </div>
-            </div>
-            <div>
-              <Label htmlFor="phone">Phone</Label>
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-gray-500" />
-                <Input id="phone" defaultValue="+91 9016576612" />
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <div className="flex items-center space-x-2">
+                  <Mail className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    value={companyInfo.email || ''}
+                    onChange={(e) => setCompanyInfo({ ...companyInfo, email: e.target.value })}
+                  />
+                </div>
               </div>
-            </div>
-            <div>
-              <Label htmlFor="address">Address</Label>
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-gray-500" />
-                <Input id="address" defaultValue="Sagrampura, Surat, 395002" />
+              <div>
+                <Label htmlFor="phone">Phone</Label>
+                <div className="flex items-center space-x-2">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="phone"
+                    value={companyInfo.phone || ''}
+                    onChange={(e) => setCompanyInfo({ ...companyInfo, phone: e.target.value })}
+                  />
+                </div>
               </div>
-            </div>
-            <Button className="wb-bg-primary hover:opacity-90 text-white">
-              <Save className="h-4 w-4 mr-2" />
-              Save Changes
-            </Button>
+              <div>
+                <Label htmlFor="address">Address</Label>
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="address"
+                    value={companyInfo.address || ''}
+                    onChange={(e) => setCompanyInfo({ ...companyInfo, address: e.target.value })}
+                  />
+                </div>
+              </div>
+              <Button type="submit" disabled={saving} className="bg-blue-600 hover:bg-blue-700 text-white">
+                {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+                Save Changes
+              </Button>
+            </form>
           </CardContent>
         </Card>
 
-        {/* SEO Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Globe className="h-5 w-5" />
-              <span>SEO Settings</span>
-            </CardTitle>
-            <CardDescription>
-              Configure SEO settings for better search visibility
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="siteTitle">Site Title</Label>
-              <Input id="siteTitle" defaultValue="Web Buddies - Modern Websites & Web Applications" />
-            </div>
-            <div>
-              <Label htmlFor="siteDescription">Site Description</Label>
-              <Input id="siteDescription" defaultValue="Professional web development services in Surat. MERN stack, Next.js, and modern web applications." />
-            </div>
-            <div>
-              <Label htmlFor="keywords">Keywords</Label>
-              <Input id="keywords" defaultValue="web development, MERN stack, Next.js, Surat, India" />
-            </div>
-            <Button className="wb-bg-primary hover:opacity-90 text-white">
-              <Save className="h-4 w-4 mr-2" />
-              Update SEO
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="space-y-6">
+          {/* System Control */}
+          <Card className="border-red-200 dark:border-red-900/50 shadow-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center space-x-2 text-red-600 dark:text-red-400">
+                <ShieldAlert className="h-5 w-5" />
+                <span>System Control</span>
+              </CardTitle>
+              <CardDescription>
+                Emergency controls and system status
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                <div className="space-y-0.5">
+                  <Label className="text-base">Maintenance Mode</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Restrict public access to the site
+                  </p>
+                </div>
+                <Switch
+                  checked={companyInfo.maintenanceMode}
+                  onCheckedChange={handleMaintenanceToggle}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* SEO Settings */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Globe className="h-5 w-5" />
+                <span>SEO Configuration</span>
+              </CardTitle>
+              <CardDescription>
+                Basic SEO settings (View Only - Use API for full control)
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Site Title</Label>
+                <Input value={seoSettings.siteTitle} disabled />
+              </div>
+              <div>
+                <Label>Description</Label>
+                <Input value={seoSettings.siteDescription} disabled />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-
-      {/* Statistics */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Website Statistics</CardTitle>
-          <CardDescription>
-            Overview of your website performance
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold wb-text-primary">50+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Projects Completed</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold wb-text-primary">40+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Happy Clients</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold wb-text-primary">5+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Years Experience</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold wb-text-primary">24h</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Response Time</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
