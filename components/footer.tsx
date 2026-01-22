@@ -42,6 +42,7 @@ export function Footer() {
           </ul>
         </div>
         <div>
+          
           <h4 className="text-[10px] uppercase tracking-widest mb-6">Services</h4>
           <ul className="space-y-3 text-sm font-light">
             <li>
